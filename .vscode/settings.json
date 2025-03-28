@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "freertos.h": "c",
+        "core_cm7.h": "c",
+        "stm32n657xx.h": "c",
+        "cmsis_gcc.h": "c",
+        "queue.h": "c",
+        "task.h": "c",
+        "core_cm55.h": "c"
+    }
+}

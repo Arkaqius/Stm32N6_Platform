@@ -1,0 +1,72 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate Build System",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-G",
+                "Unix Makefiles",
+                "-DCMAKE_VERBOSE_MAKEFILE=ON",
+                "-DCMAKE_TOOLCHAIN_FILE=C:/STM32N6/03_Repos/proj/src/_cmake/toolchain.cmake",
+                "-B",
+                "build",
+                "-S",
+                "src"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Generate the build system using CMake"
+        },
+        {
+            "label": "Build Project",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Build the project using CMake"
+        },
+        {
+            "label": "Clean Build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--target",
+                "clean"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Clean build files using CMake"
+        },
+        {
+            "label": "Full Clean & Rebuild",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/C",
+                "rmdir /s /q build && cmake -G \"Unix Makefiles\" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_TOOLCHAIN_FILE=C:/STM32N6/03_Repos/proj/src/_cmake/toolchain.cmake -B build -S src && cmake --build build"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Delete the build directory, generate the build system, and perform a full rebuild"
+        }
+    ]
+}
