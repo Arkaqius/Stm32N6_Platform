@@ -6,6 +6,7 @@
         "cmsis_gcc.h": "c",
         "queue.h": "c",
         "task.h": "c",
-        "core_cm55.h": "c"
+        "core_cm55.h": "c",
+        "devm_runtime.h": "c"
     }
 }
