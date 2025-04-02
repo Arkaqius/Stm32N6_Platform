@@ -33,7 +33,7 @@ static DevManager_T g_DevManager_instance;
 /*******************************************************************************
  * Static Function Prototypes
  *******************************************************************************/
-
+static bool DevManager_init(void);
 /*******************************************************************************
  * Functions
  *******************************************************************************/
@@ -50,6 +50,21 @@ void DevM_Startup(void)
   DevM_StateInitPreOS(); /* Execute Pre-OS initialization */
   DevM_StateInitOS();    /* Execute OS-specific initialization */
   vTaskStartScheduler(); /* Start FreeRTOS scheduler, dispatch context switching */
+}
+
+/**
+ * @brief Initialize Device Manager singleton instance.
+ *
+ * @return true if initialization successful, false otherwise.
+ */
+static bool DevManager_init(void)
+{
+  if (!g_DevManager_instance.initialized)
+  {
+    g_DevManager_instance.initialized = true;
+    return true;
+  }
+  return false;
 }
 
 /**

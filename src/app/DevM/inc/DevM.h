@@ -53,13 +53,6 @@ typedef struct DevManager_T
 /* Exported Interfaces ------------------------------------------------------*/
 
 /**
- * @brief Initialize Device Manager singleton instance.
- *
- * @return true if initialization successful, false otherwise.
- */
-bool DevManager_init(void);
-
-/**
  * @brief Retrieve pointer to Device Manager instance.
  *
  * @return Pointer to singleton Device Manager instance or NULL if uninitialized.
