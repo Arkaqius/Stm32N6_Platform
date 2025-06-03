@@ -1,7 +1,9 @@
 # ------------------------------------------------------------------------------
 # Cross-Compile Settings
 # ------------------------------------------------------------------------------
-set(STM32_LINKER_SCRIPT "C:/STM32N6/03_Repos/proj/src/_cmake/ld_script/STM32N657X0HXQ_AXISRAM2_fsbl.ld")
+# Path to the linker script relative to this toolchain file so it works on any
+# host and does not rely on a hard coded Windows path.
+set(STM32_LINKER_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/ld_script/STM32N657X0HXQ_AXISRAM2_fsbl.ld")
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)  # Ensure no host system linking
