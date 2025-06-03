@@ -22,4 +22,8 @@
 #define LOGGER_LOG_QUEUE_SIZE (32U) /**< Default size of the log queue */
 #endif
 
+#ifndef LOGGER_DEBUG_BUFFER_SIZE
+#define LOGGER_DEBUG_BUFFER_SIZE (128U) /**< Default size of the debug value buffer */
+#endif
+
 #endif // LOGGER_CFG_H
