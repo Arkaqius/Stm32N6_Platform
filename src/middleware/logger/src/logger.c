@@ -14,6 +14,7 @@
 
 static inline Logger_Entry_T *dequeue_normal_log(Logger_Context_T *ctx);
 static inline void enqueue_normal_log(Logger_Context_T *ctx, Logger_Entry_T *entry);
+static inline Logger_Entry_T *peek_normal_log(Logger_Context_T *ctx);
 static bool format_log_entry(Logger_Entry_T *entry);
 /*** Logger API ***/
 /**
@@ -27,6 +28,7 @@ Logger_Entry_T *logger_alloc_entry(Logger_Context_T *ctx)
         if (!(ctx->regular_log_pool[i].in_use))
         {
             ctx->regular_log_pool[i].in_use = true;
+            ctx->regular_log_pool[i].is_formatted = false;
             return &(ctx->regular_log_pool[i]);
         }
     }
@@ -40,6 +42,7 @@ Logger_Entry_T *logger_alloc_entry(Logger_Context_T *ctx)
 void logger_commit_entry(Logger_Context_T *ctx, Logger_Entry_T *entry)
 {
     entry->timestamp = xTaskGetTickCount();
+    entry->is_formatted = false;
     enqueue_normal_log(ctx, entry);
     xTaskNotifyGive(ctx->logger_task_handle);
 }
@@ -58,6 +61,7 @@ void logger_trigger_highprio(Logger_Context_T *ctx, uint8_t idx, uint32_t timest
         return;
     entry->timestamp = timestamp;
     entry->in_use = true;
+    entry->is_formatted = false;
     __atomic_or_fetch(&(ctx->high_prio_mask), (1u << idx), __ATOMIC_RELAXED);
     xTaskNotifyGive(ctx->logger_task_handle);
 }
@@ -77,25 +81,48 @@ void logger_tx_scheduler(Logger_Context_T *ctx)
         entry = ctx->high_prio_registry[idx];
         if (entry && entry->in_use)
         {
-            if (format_log_entry(entry) &&
-                UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length))
+            bool sent = false;
+            bool ready = entry->is_formatted ? true : format_log_entry(entry);
+            if (ready)
+            {
+                sent = UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
+            }
+
+            if (sent)
             {
                 entry->in_use = false;
+                entry->is_formatted = false;
                 __atomic_and_fetch(&(ctx->high_prio_mask), ~(1u << idx), __ATOMIC_RELAXED);
+            }
+            else
+            {
+                xTaskNotifyGive(ctx->logger_task_handle);
             }
             return;
         }
     }
 
     // 2. Normal log queue
-    entry = dequeue_normal_log(ctx);
+    entry = peek_normal_log(ctx);
     if (entry)
     {
-        if (format_log_entry(entry))
+        bool sent = false;
+        bool ready = entry->is_formatted ? true : format_log_entry(entry);
+        if (ready)
         {
-            UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
+            sent = UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
         }
-        entry->in_use = false;
+
+        if (sent)
+        {
+            dequeue_normal_log(ctx);
+            entry->in_use = false;
+            entry->is_formatted = false;
+        }
+        else
+        {
+            xTaskNotifyGive(ctx->logger_task_handle);
+        }
     }
 }
 
@@ -145,6 +172,7 @@ static inline void enqueue_normal_log(Logger_Context_T *ctx, Logger_Entry_T *ent
     else
     {
         entry->in_use = false; // Drop log if queue full
+        entry->is_formatted = false;
     }
 }
 
@@ -157,6 +185,15 @@ static inline Logger_Entry_T *dequeue_normal_log(Logger_Context_T *ctx)
     Logger_Entry_T *e = ctx->regular_log_queue[ctx->log_tail];
     ctx->log_tail = (ctx->log_tail + 1) % LOGGER_LOG_QUEUE_SIZE;
     return e;
+}
+
+static inline Logger_Entry_T *peek_normal_log(Logger_Context_T *ctx)
+{
+    if (ctx->log_tail == ctx->log_head)
+    {
+        return NULL;
+    }
+    return ctx->regular_log_queue[ctx->log_tail];
 }
 
 /**
@@ -193,6 +230,7 @@ static bool format_log_entry(Logger_Entry_T *entry)
     memmove(&entry->msg[ts_len], &entry->msg[0], entry->length);
     memcpy(&entry->msg[0], ts_buf, ts_len);
     entry->length += ts_len;
+    entry->is_formatted = true;
 
     return true;
 }
