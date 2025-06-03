@@ -40,8 +40,8 @@ typedef struct Logger_Context_Tag
 {
     volatile uint32_t high_prio_mask;                                 /**< Bitmask for high-priority logs */
     Logger_Entry_T *high_prio_registry[LOGGER_HIGH_PRIO_LOGS_NUMBER]; /**< Registry for high-priority log entries */
-    Logger_Entry_T regular_log_pool[LOGGER_LOG_ENTRY_BUFFER_SIZE];    /**< Pool for normal-priority log entries */
-    Logger_Entry_T *regular_log_queue[LOGGER_LOG_ENTRY_BUFFER_SIZE];  /**< Queue for normal-priority log entries */
+    Logger_Entry_T regular_log_pool[LOGGER_LOG_QUEUE_SIZE];           /**< Pool for normal-priority log entries */
+    Logger_Entry_T *regular_log_queue[LOGGER_LOG_QUEUE_SIZE];         /**< Queue for normal-priority log entries */
     volatile uint8_t log_head;                                        /**< Head index of the normal log queue */
     volatile uint8_t log_tail;                                        /**< Tail index of the normal log queue */
     TaskHandle_t logger_task_handle;                                  /**< Handle for the logger task */
