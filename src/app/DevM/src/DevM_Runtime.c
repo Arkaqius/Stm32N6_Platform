@@ -18,6 +18,7 @@
 /* Local Types and Typedefs -------------------------------------------------*/
 
 /* Global Variables ---------------------------------------------------------*/
+/**< Current state of the Device Manager state machine. */
 static DevM_StateType currentState = DEVM_STATE_FAULT;
 
 /* Private Function Prototypes ----------------------------------------------*/
@@ -83,6 +84,9 @@ static DevM_ReturnType DevM_StateSoftRestart(void)
     return DEVM_OK;
 }
 
+/**
+ * @brief Normal operating state handling.
+ */
 static DevM_ReturnType DevM_StateRun(void) { return DEVM_OK; }
 
 /**

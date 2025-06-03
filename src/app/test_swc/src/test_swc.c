@@ -15,8 +15,10 @@
 #include <string.h>  // For string operations
 
 /* Defines ------------------------------------------------------------------*/
-#define TEST_TASK_PERIOD_MS 1
-static char testMessage[] = "Hello world from DMA!\r\n"; // Test message to be sent via UART DMA
+#define TEST_TASK_PERIOD_MS 1 /**< Period of the demo task in milliseconds */
+
+/** Test message sent over UART DMA for demonstration purposes. */
+static char testMessage[] = "Hello world from DMA!\r\n";
 /* Private Function Prototypes ----------------------------------------------*/
 static void TestTask(void *pvParameters);
 

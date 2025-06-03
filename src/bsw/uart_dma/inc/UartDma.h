@@ -15,6 +15,9 @@
 #include "stm32n6xx_ll_gpio.h"
 #include "stm32n6xx_ll_dma.h"
 /* Macros and Defines -------------------------------------------------------*/
+/**
+ * @brief Example constant used within the UART DMA module.
+ */
 #define EXAMPLE_MODULE_CONSTANT (100U)
 
 /* Typedefs -----------------------------------------------------------------*/
@@ -28,6 +31,7 @@ typedef struct
 } UartDma_Handler_T;
 
 /* Exported Variables -------------------------------------------------------*/
+/** Example global variable used by the module. */
 extern uint32_t g_exampleGlobalVariable;
 
 /* Exported Interfaces ------------------------------------------------------*/

@@ -29,14 +29,21 @@
 /* Local Types and Typedefs -------------------------------------------------*/
 
 /* Global Variables ---------------------------------------------------------*/
+/**< Handle of the Device Manager main task created during OS init. */
 static TaskHandle_t devmTaskHandle = NULL;
-/* Queue handle for state events */
-QueueHandle_t devmEventQueue = NULL; /* TODO */
+
+/** Queue used to send events to the Device Manager state machine. */
+QueueHandle_t devmEventQueue = NULL;
 /* Private Function Prototypes ----------------------------------------------*/
+/** Initialize basic infrastructure prior to OS start. */
 static DevM_ReturnType DevM_InitInfra(void);
+/** Initialize basic software components before OS start. */
 static DevM_ReturnType DevM_StateInitBswPreOS(void);
+/** Initialize middleware components before OS start. */
 static DevM_ReturnType DevM_StateInitMiddlewarePreOS(void);
+/** Initialize service components before OS start. */
 static DevM_ReturnType DevM_StateInitServicesPreOS(void);
+/** Disable resource security to allow full SRAM access. */
 static void DevM_DisableResourceSecurity(void);
 /* Public Functions Implementation ------------------------------------------*/
 /**
@@ -88,6 +95,9 @@ DevM_ReturnType DevM_StateInitOS(void)
 }
 
 /* Private Functions Implementation -----------------------------------------*/
+/**
+ * @brief Initialize infrastructure components such as caches and clocks.
+ */
 static DevM_ReturnType DevM_InitInfra(void)
 {
     SCB_EnableICache();
@@ -117,16 +127,25 @@ static DevM_ReturnType DevM_InitInfra(void)
     return DEVM_OK;
 }
 
+/**
+ * @brief Initialize basic software modules before OS start.
+ */
 static DevM_ReturnType DevM_StateInitBswPreOS(void)
 {
 
     return DEVM_OK;
 }
+/**
+ * @brief Initialize middleware components before OS start.
+ */
 static DevM_ReturnType DevM_StateInitMiddlewarePreOS(void)
 {
 
     return DEVM_OK;
 }
+/**
+ * @brief Initialize application services before OS start.
+ */
 static DevM_ReturnType DevM_StateInitServicesPreOS(void)
 {
     TestSWC_Init();

@@ -21,6 +21,14 @@
 /* Typedefs -----------------------------------------------------------------*/
 /* Exported Variables -------------------------------------------------------*/
 /* Exported Interfaces ------------------------------------------------------*/
+/**
+ * @brief Perform initialization steps that require the OS to be running.
+ *
+ * Middleware and application level components are initialized during this
+ * stage once scheduler is active.
+ *
+ * @return Result of the initialization step.
+ */
 DevM_ReturnType DevM_StateInitPostOS(void);
 
 #endif /* DEVM_POSTOS_H */

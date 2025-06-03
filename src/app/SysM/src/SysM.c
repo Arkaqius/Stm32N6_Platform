@@ -1,5 +1,5 @@
 /**
- * @file Cfg_logger.c
+ * @file SysM.c
  * @brief Brief description of source file implementation
  *
  * Detailed description about what this file implements or handles.
@@ -12,6 +12,9 @@
 /* Local Types and Typedefs -------------------------------------------------*/
 
 /* Global Variables ---------------------------------------------------------*/
+/**
+ * @brief Statically allocated application logger context.
+ */
 static Logger_Context_T logger_context = LOGGER_CONTEXT_INIT;
 
 /* Private Function Prototypes ----------------------------------------------*/
