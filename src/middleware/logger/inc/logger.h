@@ -20,7 +20,9 @@
     .regular_log_pool = {0},   \
     .regular_log_queue = {0},  \
     .log_head = 0,             \
-    .log_tail = 0}
+    .log_tail = 0,             \
+    .debug_buffer = {0},       \
+    .debug_idx = 0}
 
 /**
  * @brief Log entry structure
@@ -43,6 +45,8 @@ typedef struct Logger_Context_Tag
     volatile uint8_t log_head;                                        /**< Head index of the normal log queue */
     volatile uint8_t log_tail;                                        /**< Tail index of the normal log queue */
     TaskHandle_t logger_task_handle;                                  /**< Handle for the logger task */
+    volatile uint32_t debug_buffer[LOGGER_DEBUG_BUFFER_SIZE];         /**< Buffer for raw debug values */
+    volatile uint16_t debug_idx;                                      /**< Write index for debug buffer */
 } Logger_Context_T;
 
 /**
@@ -74,5 +78,11 @@ void logger_tx_scheduler(Logger_Context_T *ctx);
  * @param arg Unused
  */
 void logger_tx_task(void *arg);
+
+/**
+ * @brief Store a 32-bit debug value for later inspection
+ * @param value Value to record in the debug buffer
+ */
+void logger_debug_push(Logger_Context_T *ctx, uint32_t value);
 
 #endif // LOGGER_H

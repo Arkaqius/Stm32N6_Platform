@@ -127,6 +127,12 @@ void logger_tx_task(void *arg)
     }
 }
 
+void logger_debug_push(Logger_Context_T *ctx, uint32_t value)
+{
+    uint16_t idx = __atomic_fetch_add(&ctx->debug_idx, 1, __ATOMIC_RELAXED);
+    ctx->debug_buffer[idx % LOGGER_DEBUG_BUFFER_SIZE] = value;
+}
+
 /*** Helper Functions ***/
 static inline void enqueue_normal_log(Logger_Context_T *ctx, Logger_Entry_T *entry)
 {
