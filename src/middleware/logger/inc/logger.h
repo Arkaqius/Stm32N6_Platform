@@ -34,6 +34,7 @@ typedef struct
     uint32_t timestamp;                        /**< Log timestamp */
     bool in_use;                               /**< Allocation flag */
     bool is_const;                             /**< Is message stored in flash */
+    bool is_formatted;                         /**< Timestamp already prepended */
 } Logger_Entry_T;
 
 typedef struct Logger_Context_Tag
@@ -70,6 +71,11 @@ void logger_trigger_highprio(Logger_Context_T *ctx, uint8_t idx, uint32_t timest
 
 /**
  * @brief Logger transmission scheduler (called by logger task)
+ *
+ * Attempts to transmit the next pending log entry. If the underlying
+ * UartDma_Transmit() call fails, the entry remains queued/registered and
+ * the logger task is notified to retry. Retries continue until the
+ * transmission succeeds.
  */
 void logger_tx_scheduler(Logger_Context_T *ctx);
 
