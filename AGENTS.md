@@ -1,0 +1,1 @@
+Build project by executing "mkdir build && cmake --build build -- --no-print-directory"

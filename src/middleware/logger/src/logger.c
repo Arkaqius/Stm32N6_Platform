@@ -81,14 +81,14 @@ void logger_tx_scheduler(Logger_Context_T *ctx)
         entry = ctx->high_prio_registry[idx];
         if (entry && entry->in_use)
         {
-            bool sent = false;
-            bool ready = entry->is_formatted ? true : format_log_entry(entry);
-            if (ready)
+            bool isSent = false;
+            bool isReady = entry->is_formatted ? true : format_log_entry(entry);
+            if (isReady)
             {
-                sent = UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
+                isSent = UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
             }
 
-            if (sent)
+            if (isSent)
             {
                 entry->in_use = false;
                 entry->is_formatted = false;
@@ -106,14 +106,14 @@ void logger_tx_scheduler(Logger_Context_T *ctx)
     entry = peek_normal_log(ctx);
     if (entry)
     {
-        bool sent = false;
-        bool ready = entry->is_formatted ? true : format_log_entry(entry);
-        if (ready)
+        bool isSent = false;
+        bool isReady = entry->is_formatted ? true : format_log_entry(entry);
+        if (isReady)
         {
-            sent = UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
+            isSent = UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
         }
 
-        if (sent)
+        if (isSent)
         {
             dequeue_normal_log(ctx);
             entry->in_use = false;
