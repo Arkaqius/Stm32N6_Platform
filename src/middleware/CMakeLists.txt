@@ -4,11 +4,13 @@ cmake_minimum_required(VERSION 3.22)
 set(COMPONENT_NAME "middleware_layer")
 
 # Subdirs 
-#add_subdirectory(test_swc)
+add_subdirectory(logger)
 
 add_library(${COMPONENT_NAME} INTERFACE)
-
 target_link_libraries(${COMPONENT_NAME}
     INTERFACE
-        test_swc
-)
+        os
+        HAL_Drv
+        cfg_layer
+        cmsis
+)        

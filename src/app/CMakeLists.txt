@@ -6,6 +6,7 @@ set(COMPONENT_NAME "app_layer")
 # Subdirs 
 add_subdirectory(test_swc)
 add_subdirectory(DevM)
+add_subdirectory(SysM)
 
 add_library(${COMPONENT_NAME} INTERFACE)
 target_link_libraries(${COMPONENT_NAME}

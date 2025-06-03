@@ -5,5 +5,6 @@ set(COMPONENT_NAME "bsw_layer")
 
 # Subdirs 
 add_subdirectory(infra)
+add_subdirectory(uart_dma)
 
 add_library(${COMPONENT_NAME} INTERFACE)

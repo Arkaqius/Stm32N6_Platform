@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-set(COMPONENT_NAME "DevM")
+set(COMPONENT_NAME "logger")
 
 file(GLOB COMPONENT_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c"
@@ -17,7 +17,7 @@ target_link_libraries(${COMPONENT_NAME}
     PRIVATE
         os
         cfg_layer
-        test_swc
-        logger
-        SysM
+        HAL_Drv
+        bsw_layer
+        uartDma
 )

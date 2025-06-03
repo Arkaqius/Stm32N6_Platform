@@ -8,6 +8,14 @@ file(GLOB COMPONENT_SOURCES
 
 add_library(${COMPONENT_NAME} STATIC ${COMPONENT_SOURCES})
 
+target_link_libraries(${COMPONENT_NAME}
+    PRIVATE
+        os
+        cfg_layer
+        HAL_Drv
+        uartDma
+        SysM
+)
 target_include_directories(${COMPONENT_NAME}
     PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/inc"

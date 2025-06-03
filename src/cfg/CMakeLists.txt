@@ -16,4 +16,5 @@ target_include_directories(${COMPONENT_NAME}
 target_link_libraries(${COMPONENT_NAME}
     INTERFACE
         cmsis
+        logger
 )

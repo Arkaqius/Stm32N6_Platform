@@ -1,0 +1,78 @@
+/**
+ * @file logger.h
+ * @brief Public interface for the real-time logger component
+ */
+
+#ifndef LOGGER_H
+#define LOGGER_H
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "logger_cfg.h" /* Default logger cfg */
+#include "cfg_logger.h" /* Project logger cfg */
+#include "FreeRTOS.h"   /* FreeRTOS definitions */
+#include "task.h"       /* FreeRTOS task definitions */
+
+/** Constructor for context object */
+#define LOGGER_CONTEXT_INIT {  \
+    .high_prio_mask = 0,       \
+    .high_prio_registry = {0}, \
+    .regular_log_pool = {0},   \
+    .regular_log_queue = {0},  \
+    .log_head = 0,             \
+    .log_tail = 0}
+
+/**
+ * @brief Log entry structure
+ */
+typedef struct
+{
+    uint8_t msg[LOGGER_LOG_ENTRY_BUFFER_SIZE]; /**< Log message text */
+    uint8_t length;                            /**< Length of the message */
+    uint32_t timestamp;                        /**< Log timestamp */
+    bool in_use;                               /**< Allocation flag */
+    bool is_const;                             /**< Is message stored in flash */
+} Logger_Entry_T;
+
+typedef struct Logger_Context_Tag
+{
+    volatile uint32_t high_prio_mask;                                 /**< Bitmask for high-priority logs */
+    Logger_Entry_T *high_prio_registry[LOGGER_HIGH_PRIO_LOGS_NUMBER]; /**< Registry for high-priority log entries */
+    Logger_Entry_T regular_log_pool[LOGGER_LOG_ENTRY_BUFFER_SIZE];    /**< Pool for normal-priority log entries */
+    Logger_Entry_T *regular_log_queue[LOGGER_LOG_ENTRY_BUFFER_SIZE];  /**< Queue for normal-priority log entries */
+    volatile uint8_t log_head;                                        /**< Head index of the normal log queue */
+    volatile uint8_t log_tail;                                        /**< Tail index of the normal log queue */
+    TaskHandle_t logger_task_handle;                                  /**< Handle for the logger task */
+} Logger_Context_T;
+
+/**
+ * @brief Allocates a log entry from the static pool
+ * @return Pointer to Logger_Entry_T if available, NULL otherwise
+ */
+Logger_Entry_T *logger_alloc_entry(Logger_Context_T *ctx);
+
+/**
+ * @brief Commits a normal-priority log entry for asynchronous transmission
+ * @param entry Pointer to the log entry
+ */
+void logger_commit_entry(Logger_Context_T *ctx, Logger_Entry_T *entry);
+
+/**
+ * @brief Registers a preallocated high-priority log entry
+ * @param idx High-priority slot index (0–31)
+ * @param entry Pointer to statically defined Logger_Entry_T
+ */
+void logger_trigger_highprio(Logger_Context_T *ctx, uint8_t idx, uint32_t timestamp);
+
+/**
+ * @brief Logger transmission scheduler (called by logger task)
+ */
+void logger_tx_scheduler(Logger_Context_T *ctx);
+
+/**
+ * @brief RTOS task function that handles logger transmission
+ * @param arg Unused
+ */
+void logger_tx_task(void *arg);
+
+#endif // LOGGER_H

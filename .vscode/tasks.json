@@ -8,12 +8,11 @@
             "args": [
                 "-G",
                 "Unix Makefiles",
-                "-DCMAKE_VERBOSE_MAKEFILE=ON",
                 "-DCMAKE_TOOLCHAIN_FILE=C:/STM32N6/03_Repos/proj/src/_cmake/toolchain.cmake",
                 "-B",
                 "build",
                 "-S",
-                "src"
+                "src",
             ],
             "group": {
                 "kind": "build",
@@ -30,7 +29,9 @@
             "command": "cmake",
             "args": [
                 "--build",
-                "build"
+                "build",
+                "--",
+                "--no-print-directory",
             ],
             "group": "build",
             "problemMatcher": [
@@ -46,7 +47,9 @@
                 "--build",
                 "build",
                 "--target",
-                "clean"
+                "clean",
+                "--",
+                "--no-print-directory",
             ],
             "group": "build",
             "problemMatcher": [
@@ -60,7 +63,7 @@
             "command": "cmd",
             "args": [
                 "/C",
-                "rmdir /s /q build && cmake -G \"Unix Makefiles\" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_TOOLCHAIN_FILE=C:/STM32N6/03_Repos/proj/src/_cmake/toolchain.cmake -B build -S src && cmake --build build"
+                "rmdir /s /q build && cmake -G \"Unix Makefiles\" -DCMAKE_TOOLCHAIN_FILE=C:/STM32N6/03_Repos/proj/src/_cmake/toolchain.cmake -B build -S src && cmake --build build -- --no-print-directory"
             ],
             "group": "build",
             "problemMatcher": [

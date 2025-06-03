@@ -22,17 +22,18 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("C:/STM32N6/03_Repos/proj/tools", "$(ProjectDir)");
-  Project.AddPathSubstitute ("c:/stm32n6/03_repos/proj/tools", "$(ProjectDir)");
   Project.SetDevice ("STM32N657X0");
   Project.SetHostIF ("USB", "");
-  Project.SetTargetIF ("SWD");
+  Project.SetTargetIF ("JTAG");
   Project.SetTIFSpeed ("4 MHz");
+  Project.AddPathSubstitute ("C:/STM32N6/03_Repos/proj/tools", "$(ProjectDir)");
+  Project.AddPathSubstitute ("c:/stm32n6/03_repos/proj/tools", "$(ProjectDir)");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M55F.svd");
   Project.AddSvdFile ("C:/STM32N6/03_Repos/proj/tools/svd/STM32N657.svd");
   //
   // User settings
   //
+  Project.SetOSPlugin ("FreeRTOSPlugin_CM4");
   File.Open ("C:/STM32N6/03_Repos/proj/build/bin/EdgeAI.elf");
 }
 

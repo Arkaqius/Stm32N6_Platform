@@ -7,6 +7,15 @@
         "queue.h": "c",
         "task.h": "c",
         "core_cm55.h": "c",
-        "devm_runtime.h": "c"
+        "devm_runtime.h": "c",
+        "uartdma.h": "c",
+        "stm32n6xx_ll_usart.h": "c",
+        "stm32n6xx_ll_dma.h": "c",
+        "stdint.h": "c",
+        "stm32n6xx_ll_bus.h": "c",
+        "test_swc.h": "c",
+        "logger.h": "c",
+        "logger_cfg.h": "c",
+        "cfg_logger.h": "c"
     }
 }

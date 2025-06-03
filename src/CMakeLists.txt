@@ -9,6 +9,21 @@ set(CMAKE_RULE_MESSAGES OFF)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/libs)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/libs)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+add_compile_definitions(
+    STM32N657xx
+    USE_FULL_LL_DRIVER
+    HSE_VALUE=48000000U
+    HSE_STARTUP_TIMEOUT=100U
+    LSE_VALUE=32768U
+    LSE_STARTUP_TIMEOUT=5000U
+    EXTERNAL_CLOCK_VALUE=12288000U
+    MSI_VALUE=16000000U
+    HSI_VALUE=64000000U
+    LSI_VALUE=32000U
+    VDD_VALUE=3300U
+    TX_SINGLE_MODE_SECURE=1U
+)
 # Main Executable
 # ------------------------------------------------------------------------------
 # If you want a top-level executable (e.g., for the final firmware image):
@@ -37,8 +52,8 @@ add_subdirectory(os ${CMAKE_BINARY_DIR}/os)
 target_link_libraries(${PROJECT_NAME}
      PRIVATE
        app_layer
-       #middleware
-       #bsw
+       middleware_layer
+       bsw_layer
        os
        HAL_Drv
        infra
