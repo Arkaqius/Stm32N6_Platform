@@ -30,11 +30,17 @@
 static UartDma_Handler_T g_uartDmaHandler = {0};
 
 /* Private Function Prototypes -----------------------------------------------*/
+/** Forward declaration of the driver main task. */
 static void UartDma_MainTask(void *pvParameters);
+/** Initialize the USART peripheral. */
 static bool UartDma_InitUsart(void);
+/** Configure GPIO pins for the USART peripheral. */
 static bool UartDma_InitGpio(void);
+/** Configure DMA channel for USART transmissions. */
 static bool UartDma_InitDma(void);
+/** Handle DMA related error conditions. */
 static bool UartDma_ErrorHandler(void);
+/** Create internal FreeRTOS tasks used by the driver. */
 static void UartDma_TasksInit(void);
 
 /**
@@ -98,6 +104,11 @@ bool UartDma_Transmit(const uint8_t *data, uint16_t size)
     return true;
 }
 
+/**
+ * @brief Configure and enable the USART peripheral used for logging.
+ *
+ * @return true on successful initialization, false otherwise.
+ */
 static bool UartDma_InitUsart(void)
 {
     LL_USART_InitTypeDef usart_h;
@@ -124,6 +135,11 @@ static bool UartDma_InitUsart(void)
     return true;
 }
 
+/**
+ * @brief Initialize GPIO pins associated with the USART peripheral.
+ *
+ * @return true on successful initialization.
+ */
 static bool UartDma_InitGpio(void)
 {
     LL_GPIO_InitTypeDef gpio_h;
@@ -140,6 +156,11 @@ static bool UartDma_InitGpio(void)
     return true;
 }
 
+/**
+ * @brief Configure the DMA channel used for USART transmissions.
+ *
+ * @return true on successful configuration.
+ */
 static bool UartDma_InitDma(void)
 {
     LL_DMA_InitTypeDef dma_h;
@@ -166,16 +187,30 @@ static bool UartDma_InitDma(void)
     return true;
 }
 
+/**
+ * @brief Handle DMA error conditions.
+ *
+ * This implementation currently performs no recovery and simply
+ * returns false.
+ */
 static bool UartDma_ErrorHandler(void)
 {
     return false;
 }
 
+/**
+ * @brief Create internal tasks required by the UART DMA driver.
+ */
 static void UartDma_TasksInit(void)
 {
     xTaskCreate(UartDma_MainTask, "UartDmaMainTask", 1000, NULL, 1, NULL);
 }
 
+/**
+ * @brief Background task used for future driver extensions.
+ *
+ * @param pvParameters Unused parameter.
+ */
 static void UartDma_MainTask(void *pvParameters)
 {
     while (1)

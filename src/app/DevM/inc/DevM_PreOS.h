@@ -22,8 +22,29 @@
 /* Macros and Defines -------------------------------------------------------*/
 /* Typedefs -----------------------------------------------------------------*/
 /* Exported Variables -------------------------------------------------------*/
-extern QueueHandle_t devmEventQueue; /* TODO */
+/**
+ * @brief Queue used to post events to the Device Manager state machine.
+ */
+extern QueueHandle_t devmEventQueue;
+
 /* Exported Interfaces ------------------------------------------------------*/
+/**
+ * @brief Perform the pre-operating-system initialization sequence.
+ *
+ * This includes infrastructure, basic software, middleware and service setup
+ * required before the scheduler is started.
+ *
+ * @return Result of the initialization step.
+ */
 DevM_ReturnType DevM_StateInitPreOS(void);
+
+/**
+ * @brief Perform initialization that requires the operating system to be
+ * running.
+ *
+ * OS resources such as tasks and queues are created during this stage.
+ *
+ * @return Result of the initialization step.
+ */
 DevM_ReturnType DevM_StateInitOS(void);
 #endif /* DEVM_PREOS_H */

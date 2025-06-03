@@ -14,6 +14,7 @@
 #include "stdbool.h"
 
 /* Macros and Defines -------------------------------------------------------*/
+/** Default initialization value used for DevM example */
 #define DEVM_DEFAULT_INIT_VALUE (100U)
 
 /* Typedefs -----------------------------------------------------------------*/

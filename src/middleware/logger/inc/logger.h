@@ -13,7 +13,9 @@
 #include "FreeRTOS.h"   /* FreeRTOS definitions */
 #include "task.h"       /* FreeRTOS task definitions */
 
-/** Constructor for context object */
+/**
+ * @brief Helper macro to statically initialize a ::Logger_Context_T object.
+ */
 #define LOGGER_CONTEXT_INIT {  \
     .high_prio_mask = 0,       \
     .high_prio_registry = {0}, \
