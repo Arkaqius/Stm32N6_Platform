@@ -12,9 +12,13 @@
 #include "task.h"
 #include "cmsis_gcc.h"
 
+/** Remove and return the next regular log entry from the queue. */
 static inline Logger_Entry_T *dequeue_normal_log(Logger_Context_T *ctx);
+/** Queue a normal-priority log entry for transmission. */
 static inline void enqueue_normal_log(Logger_Context_T *ctx, Logger_Entry_T *entry);
+/** Peek the next log entry in the queue without removing it. */
 static inline Logger_Entry_T *peek_normal_log(Logger_Context_T *ctx);
+/** Format a log entry by prepending a timestamp. */
 static bool format_log_entry(Logger_Entry_T *entry);
 /*** Logger API ***/
 /**
@@ -173,6 +177,9 @@ void logger_debug_push(Logger_Context_T *ctx, uint32_t value)
 }
 
 /*** Helper Functions ***/
+/**
+ * @brief Place a log entry into the regular log queue.
+ */
 static inline void enqueue_normal_log(Logger_Context_T *ctx, Logger_Entry_T *entry)
 {
     uint8_t next = (ctx->log_head + 1) % LOGGER_LOG_QUEUE_SIZE;
@@ -188,6 +195,9 @@ static inline void enqueue_normal_log(Logger_Context_T *ctx, Logger_Entry_T *ent
     }
 }
 
+/**
+ * @brief Remove and return the oldest log entry from the queue.
+ */
 static inline Logger_Entry_T *dequeue_normal_log(Logger_Context_T *ctx)
 {
     if (ctx->log_tail == ctx->log_head) // Queue is empty
@@ -199,6 +209,9 @@ static inline Logger_Entry_T *dequeue_normal_log(Logger_Context_T *ctx)
     return e;
 }
 
+/**
+ * @brief Get a pointer to the next log entry without dequeuing it.
+ */
 static inline Logger_Entry_T *peek_normal_log(Logger_Context_T *ctx)
 {
     if (ctx->log_tail == ctx->log_head)

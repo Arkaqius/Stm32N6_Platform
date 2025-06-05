@@ -20,5 +20,13 @@
 /* Typedefs -----------------------------------------------------------------*/
 /* Exported Variables -------------------------------------------------------*/
 /* Exported Interfaces ------------------------------------------------------*/
+/**
+ * @brief Execute the state machine task loop.
+ *
+ * The function waits for events on the Device Manager queue and processes
+ * them through the state machine.
+ *
+ * @param params Unused parameter required by FreeRTOS task signature.
+ */
 void DevM_MainFunction(void *params);
 #endif /* DEVM_RUNTIME_H */

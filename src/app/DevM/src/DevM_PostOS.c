@@ -15,10 +15,14 @@
 /* Global Variables ---------------------------------------------------------*/
 
 /* Private Function Prototypes ----------------------------------------------*/
-static DevM_ReturnType DevM_StateInitBswPostOS(void);
-static DevM_ReturnType DevM_StateInitMiddlewarePostOS(void);
-static DevM_ReturnType DevM_StateInitServicesPostOS(void);
-static DevM_ReturnType DevM_StateInitApp(void);
+/** Initialize basic software components after the OS has started. */
+static DevM_ReturnType DevM_StateInitBswPostOS(void); 
+/** Initialize middleware components after the OS has started. */
+static DevM_ReturnType DevM_StateInitMiddlewarePostOS(void); 
+/** Initialize service layer components after the OS has started. */
+static DevM_ReturnType DevM_StateInitServicesPostOS(void); 
+/** Final application initialization step. */
+static DevM_ReturnType DevM_StateInitApp(void); 
 /* Public Functions Implementation ------------------------------------------*/
 /**
  * @brief Initialize all post-OS components.
@@ -38,7 +42,11 @@ DevM_ReturnType DevM_StateInitPostOS(void)
 }
 
 /* Private Functions Implementation -----------------------------------------*/
+/** Basic software initialization after OS start. */
 static DevM_ReturnType DevM_StateInitBswPostOS(void) { return DEVM_OK; }
+/** Middleware initialization after OS start. */
 static DevM_ReturnType DevM_StateInitMiddlewarePostOS(void) { return DEVM_OK; }
+/** Service layer initialization after OS start. */
 static DevM_ReturnType DevM_StateInitServicesPostOS(void) { return DEVM_OK; }
+/** Application specific initialization after all services are ready. */
 static DevM_ReturnType DevM_StateInitApp(void) { return DEVM_OK; }
