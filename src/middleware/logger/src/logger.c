@@ -25,9 +25,20 @@ Logger_Entry_T *logger_alloc_entry(Logger_Context_T *ctx)
 {
     for (uint8_t i = 0; i < LOGGER_LOG_QUEUE_SIZE; i++)
     {
-        if (!(ctx->regular_log_pool[i].in_use))
+        bool expected = false;
+        /*
+         * Use an atomic compare-and-exchange to safely claim the entry.
+         * Without this, concurrent callers could observe the entry as
+         * available and allocate it multiple times, leading to lost logs.
+         */
+        if (__atomic_compare_exchange_n(&ctx->regular_log_pool[i].in_use,
+                                        &expected,
+                                        true,
+                                        false,
+                                        __ATOMIC_ACQUIRE,
+                                        __ATOMIC_RELAXED))
         {
-            ctx->regular_log_pool[i].in_use = true;
+
             ctx->regular_log_pool[i].is_formatted = false;
             return &(ctx->regular_log_pool[i]);
         }
@@ -41,6 +52,7 @@ Logger_Entry_T *logger_alloc_entry(Logger_Context_T *ctx)
  */
 void logger_commit_entry(Logger_Context_T *ctx, Logger_Entry_T *entry)
 {
+    logger_debug_push(ctx, (uint32_t)entry); // Push the current tick count to the debug buffer
     entry->timestamp = xTaskGetTickCount();
     entry->is_formatted = false;
     enqueue_normal_log(ctx, entry);
