@@ -1,0 +1,12 @@
+{
+    "name": "STM32 build container",
+    "dockerFile": "Dockerfile",
+    "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+    },
+    "extensions": [
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools"
+    ],
+    "postCreateCommand": "mkdir -p build"
+}
