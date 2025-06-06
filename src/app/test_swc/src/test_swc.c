@@ -50,12 +50,14 @@ static void TestTask(void *pvParameters)
     for (;;)
     {
         Logger_Entry_T *entry = logger_alloc_entry(loggerCtx); // Allocate a log entry
-        strcpy((char *)entry->msg, testMessage);               // Copy the test message into the log entry
-        entry->length = sizeof(testMessage) - 1;               // Set the length of the message
+        if (entry)
+        {
+            strcpy((char *)entry->msg, testMessage); // Copy the test message into the log entry
+            entry->length = sizeof(testMessage) - 1; // Set the length of the message
 
-        logger_debug_push(loggerCtx, xTaskGetTickCount()); // Push the current tick count to the debug buffer
-        logger_commit_entry(loggerCtx, entry);             // Commit the log entry for transmission
-
+            // logger_debug_push(loggerCtx, xTaskGetTickCount()); // Push the current tick count to the debug buffer
+            logger_commit_entry(loggerCtx, entry); // Commit the log entry for transmission
+        }
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(TEST_TASK_PERIOD_MS));
     }
 }

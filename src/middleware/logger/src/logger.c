@@ -56,8 +56,9 @@ Logger_Entry_T *logger_alloc_entry(Logger_Context_T *ctx)
  */
 void logger_commit_entry(Logger_Context_T *ctx, Logger_Entry_T *entry)
 {
-    logger_debug_push(ctx, (uint32_t)entry); // Push the current tick count to the debug buffer
     entry->timestamp = xTaskGetTickCount();
+    logger_debug_push(ctx, (uint32_t)entry->timestamp); // Push the current tick count to the debug buffer
+    logger_debug_push(ctx, (uint32_t)entry);            // Push the current tick count to the debug buffer
     entry->is_formatted = false;
     enqueue_normal_log(ctx, entry);
     xTaskNotifyGive(ctx->logger_task_handle);
