@@ -36,7 +36,6 @@ typedef struct
     uint8_t base_length;                       /**< Length of the template message */
     uint32_t timestamp;                        /**< Log timestamp */
     bool in_use;                               /**< Allocation flag */
-    bool is_const;                             /**< Is message stored in flash */
     bool is_formatted;                         /**< Timestamp already prepended */
 } Logger_Entry_T;
 
@@ -94,4 +93,5 @@ void logger_tx_task(void *arg);
  */
 void logger_debug_push(Logger_Context_T *ctx, uint32_t value);
 
+void logger_register_highprio(Logger_Context_T *ctx, uint8_t idx, Logger_Entry_T *entry);
 #endif // LOGGER_H

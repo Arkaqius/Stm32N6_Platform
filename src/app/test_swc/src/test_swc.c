@@ -18,7 +18,7 @@
 #define TEST_TASK_PERIOD_MS 1 /**< Period of the demo task in milliseconds */
 
 /** Test message sent over UART DMA for demonstration purposes. */
-static char testMessage[] = "Hello world from DMA!\r\n";
+static char testMessage[] = "Hello\r\n";
 /* Private Function Prototypes ----------------------------------------------*/
 static void TestTask(void *pvParameters);
 
@@ -43,9 +43,11 @@ void TestSWC_Init(void)
 static void TestTask(void *pvParameters)
 {
     (void)pvParameters;
+    static Logger_Entry_T full_entry = {.msg = "Queue FULL\r\n", .length = 16};
 
     TickType_t xLastWakeTime = xTaskGetTickCount();
     Logger_Context_T *loggerCtx = Cfg_Logger_GetContext();
+    logger_register_highprio(loggerCtx, 0, &full_entry); // Register a high-priority log entry
 
     for (;;)
     {
@@ -56,7 +58,12 @@ static void TestTask(void *pvParameters)
             entry->length = sizeof(testMessage) - 1; // Set the length of the message
 
             // logger_debug_push(loggerCtx, xTaskGetTickCount()); // Push the current tick count to the debug buffer
-            logger_commit_entry(loggerCtx, entry); // Commit the log entry for transmission
+            logger_commit_entry(loggerCtx, entry);                      // Commit the log entry for transmission
+            logger_trigger_highprio(loggerCtx, 0, xTaskGetTickCount()); // Trigger high-priority log if allocation fails
+        }
+        else
+        {
+            logger_trigger_highprio(loggerCtx, 0, xTaskGetTickCount()); // Trigger high-priority log if allocation fails
         }
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(TEST_TASK_PERIOD_MS));
     }
