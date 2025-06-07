@@ -153,6 +153,9 @@ void logger_register_highprio(Logger_Context_T *ctx, uint8_t idx, Logger_Entry_T
     if (idx < LOGGER_HIGH_PRIO_LOGS_NUMBER)
     {
         ctx->high_prio_registry[idx] = entry;
+        /* Handle internal state */
+        ctx->high_prio_registry[idx]->in_use = false;       // Initially not in use
+        ctx->high_prio_registry[idx]->is_formatted = false; // Not formatted yet
     }
 }
 
