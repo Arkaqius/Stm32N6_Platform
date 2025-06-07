@@ -76,6 +76,13 @@ void logger_trigger_highprio(Logger_Context_T *ctx, uint8_t idx, uint32_t timest
     Logger_Entry_T *entry = ctx->high_prio_registry[idx];
     if (!entry)
         return;
+    if (entry->length > entry->base_length)
+    {
+        uint8_t diff = entry->length - entry->base_length;
+        memmove(entry->msg, entry->msg + diff, entry->base_length);
+        memset(entry->msg + entry->base_length, 0, diff);
+        entry->length = entry->base_length;
+    }
     entry->timestamp = timestamp;
     entry->in_use = true;
     entry->is_formatted = false;
@@ -152,6 +159,7 @@ void logger_register_highprio(Logger_Context_T *ctx, uint8_t idx, Logger_Entry_T
 {
     if (idx < LOGGER_HIGH_PRIO_LOGS_NUMBER)
     {
+        entry->base_length = entry->length;
         ctx->high_prio_registry[idx] = entry;
     }
 }
