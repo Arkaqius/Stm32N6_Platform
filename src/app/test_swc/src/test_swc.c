@@ -9,11 +9,11 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "test_swc.h"
-#include "UartDma.h" // Include UART DMA header for testing
-#include "logger.h"  // Include logger for logging messages
+#include "UartDma.h"    // Include UART DMA header for testing
+#include "logger.h"     // Include logger for logging messages
 #include "cfg_logger.h" // Logger configuration
-#include "SysM.h"    // Include System Manager API for system services
-#include <string.h>  // For string operations
+#include "SysM.h"       // Include System Manager API for system services
+#include <string.h>     // For string operations
 
 /* Defines ------------------------------------------------------------------*/
 #define TEST_TASK_PERIOD_MS 1 /**< Period of the demo task in milliseconds */
@@ -56,10 +56,11 @@ static void TestTask(void *pvParameters)
             strcpy((char *)entry->msg, testMessage); // Copy the test message into the log entry
             entry->length = sizeof(testMessage) - 1; // Set the length of the message
             logger_commit_entry(loggerCtx, entry);   // Commit the log entry for transmission
+            logger_trigger_highprio(loggerCtx, CFG_LOGGER_ALLOC_FAILED, xTaskGetTickCount());
         }
         else
         {
-            logger_trigger_highprio(loggerCtx, CFG_LOGGER_HP_QUEUE_FULL_IDX, xTaskGetTickCount());
+            // logger_trigger_highprio(loggerCtx, CFG_LOGGER_ALLOC_FAILED, xTaskGetTickCount());
         }
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(TEST_TASK_PERIOD_MS));
     }

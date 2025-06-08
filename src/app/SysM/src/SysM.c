@@ -20,7 +20,7 @@
 static Logger_Context_T logger_context = LOGGER_CONTEXT_INIT;
 
 LOGGER_DEFINE_HIGHPRIO_ENTRY(hp_queue_full, CFG_LOGGER_HP_QUEUE_FULL_MSG);
-
+LOGGER_DEFINE_HIGHPRIO_ENTRY(hp_alloc_failed, CFG_LOGGER_HP_QUEUE_FULL_MSG);
 /* Private Function Prototypes ----------------------------------------------*/
 
 /* Public Functions Implementation ------------------------------------------*/
@@ -39,6 +39,10 @@ void Cfg_Logger_Init(void)
     logger_register_highprio(&logger_context,
                              CFG_LOGGER_HP_QUEUE_FULL_IDX,
                              &hp_queue_full);
+
+    logger_register_highprio(&logger_context,
+                             CFG_LOGGER_ALLOC_FAILED,
+                             &hp_alloc_failed);
 }
 /* Private Functions Implementation -----------------------------------------*/
 /**
