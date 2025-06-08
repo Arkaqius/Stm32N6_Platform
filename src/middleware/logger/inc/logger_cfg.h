@@ -6,9 +6,6 @@
 #ifndef LOGGER_CFG_H
 #define LOGGER_CFG_H
 
-#ifndef LOGGER_BUFFER_SIZE_DEFAULT
-#define LOGGER_BUFFER_SIZE_DEFAULT (1024U) /**< Default buffer size for the logger */
-#endif
 
 #ifndef LOGGER_HIGH_PRIO_LOGS_NUMBER
 #define LOGGER_HIGH_PRIO_LOGS_NUMBER (10U) /**< Default number of high priority logs */

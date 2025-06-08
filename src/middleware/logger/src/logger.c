@@ -12,6 +12,8 @@
 #include "task.h"
 #include "cmsis_gcc.h"
 
+/* High-priority log entries are defined by the application and
+ * registered via ::logger_register_highprio. */
 /** Remove and return the next regular log entry from the queue. */
 static inline Logger_Entry_T *dequeue_normal_log(Logger_Context_T *ctx);
 /** Queue a normal-priority log entry for transmission. */
@@ -57,8 +59,6 @@ Logger_Entry_T *logger_alloc_entry(Logger_Context_T *ctx)
 void logger_commit_entry(Logger_Context_T *ctx, Logger_Entry_T *entry)
 {
     entry->timestamp = xTaskGetTickCount();
-    logger_debug_push(ctx, (uint32_t)entry->timestamp); // Push the current tick count to the debug buffer
-    logger_debug_push(ctx, (uint32_t)entry);            // Push the current tick count to the debug buffer
     entry->is_formatted = false;
     enqueue_normal_log(ctx, entry);
     xTaskNotifyGive(ctx->logger_task_handle);
@@ -76,6 +76,7 @@ void logger_trigger_highprio(Logger_Context_T *ctx, uint8_t idx, uint32_t timest
     Logger_Entry_T *entry = ctx->high_prio_registry[idx];
     if (!entry)
         return;
+
     if (entry->length > entry->base_length)
     {
         uint8_t diff = entry->length - entry->base_length;
@@ -106,10 +107,13 @@ void logger_tx_scheduler(Logger_Context_T *ctx)
         if (entry && entry->in_use)
         {
             bool isSent = false;
-            bool isReady = entry->is_formatted ? true : format_log_entry(entry);
-            if (isReady)
+            if (format_log_entry(entry))
             {
                 isSent = UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
+            }
+            else
+            {
+                /* Raise fault */
             }
 
             if (isSent)
@@ -206,7 +210,8 @@ static inline void enqueue_normal_log(Logger_Context_T *ctx, Logger_Entry_T *ent
     }
     else
     {
-        entry->in_use = false; // Drop log if queue full
+        logger_trigger_highprio(ctx, CFG_LOGGER_HP_QUEUE_FULL_IDX, xTaskGetTickCount());
+        entry->in_use = false;                                // Drop log if queue full
         entry->is_formatted = false;
     }
 }
