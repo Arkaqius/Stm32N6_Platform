@@ -43,11 +43,11 @@ void TestSWC_Init(void)
 static void TestTask(void *pvParameters)
 {
     (void)pvParameters;
-    static Logger_Entry_T full_entry = {.msg = "Queue FULL\r\n", .length = 16};
+    static Logger_Entry_T testSwc_alloc_failed = {.msg = "Queue FULL\r\n", .length = 16};
 
     TickType_t xLastWakeTime = xTaskGetTickCount();
     Logger_Context_T *loggerCtx = Cfg_Logger_GetContext();
-    logger_register_highprio(loggerCtx, 0, &full_entry); // Register a high-priority log entry
+    logger_register_highprio(loggerCtx, 0, &testSwc_alloc_failed); // Register a high-priority log entry
 
     for (;;)
     {
@@ -56,10 +56,7 @@ static void TestTask(void *pvParameters)
         {
             strcpy((char *)entry->msg, testMessage); // Copy the test message into the log entry
             entry->length = sizeof(testMessage) - 1; // Set the length of the message
-
-            // logger_debug_push(loggerCtx, xTaskGetTickCount()); // Push the current tick count to the debug buffer
-            logger_commit_entry(loggerCtx, entry);                      // Commit the log entry for transmission
-            logger_trigger_highprio(loggerCtx, 0, xTaskGetTickCount()); // Trigger high-priority log if allocation fails
+            logger_commit_entry(loggerCtx, entry);   // Commit the log entry for transmission
         }
         else
         {
