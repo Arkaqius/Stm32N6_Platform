@@ -124,6 +124,10 @@ void logger_tx_scheduler(Logger_Context_T *ctx)
             }
             return;
         }
+        else
+        {
+            __atomic_and_fetch(&(ctx->high_prio_mask), ~(1u << idx), __ATOMIC_RELAXED);
+        }
     }
 
     // 2. Normal log queue

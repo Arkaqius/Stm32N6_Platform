@@ -7,6 +7,8 @@
 
 /* Includes -----------------------------------------------------------------*/
 #include "logger.h"
+#include <stdbool.h>
+#include "cfg_logger.h"
 /* Defines ------------------------------------------------------------------*/
 
 /* Local Types and Typedefs -------------------------------------------------*/
@@ -16,6 +18,8 @@
  * @brief Statically allocated application logger context.
  */
 static Logger_Context_T logger_context = LOGGER_CONTEXT_INIT;
+
+LOGGER_DEFINE_HIGHPRIO_ENTRY(hp_queue_full, CFG_LOGGER_HP_QUEUE_FULL_MSG);
 
 /* Private Function Prototypes ----------------------------------------------*/
 
@@ -28,6 +32,13 @@ static Logger_Context_T logger_context = LOGGER_CONTEXT_INIT;
 Logger_Context_T *Cfg_Logger_GetContext(void)
 {
     return &logger_context;
+}
+
+void Cfg_Logger_Init(void)
+{
+    logger_register_highprio(&logger_context,
+                             CFG_LOGGER_HP_QUEUE_FULL_IDX,
+                             &hp_queue_full);
 }
 /* Private Functions Implementation -----------------------------------------*/
 /**

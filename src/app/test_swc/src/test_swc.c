@@ -11,6 +11,7 @@
 #include "test_swc.h"
 #include "UartDma.h" // Include UART DMA header for testing
 #include "logger.h"  // Include logger for logging messages
+#include "cfg_logger.h" // Logger configuration
 #include "SysM.h"    // Include System Manager API for system services
 #include <string.h>  // For string operations
 
@@ -43,11 +44,9 @@ void TestSWC_Init(void)
 static void TestTask(void *pvParameters)
 {
     (void)pvParameters;
-    static Logger_Entry_T full_entry = {.msg = "Queue FULL\r\n", .length = 16};
 
     TickType_t xLastWakeTime = xTaskGetTickCount();
     Logger_Context_T *loggerCtx = Cfg_Logger_GetContext();
-    logger_register_highprio(loggerCtx, 0, &full_entry); // Register a high-priority log entry
 
     for (;;)
     {
@@ -59,11 +58,11 @@ static void TestTask(void *pvParameters)
 
             // logger_debug_push(loggerCtx, xTaskGetTickCount()); // Push the current tick count to the debug buffer
             logger_commit_entry(loggerCtx, entry);                      // Commit the log entry for transmission
-            logger_trigger_highprio(loggerCtx, 0, xTaskGetTickCount()); // Trigger high-priority log if allocation fails
+            logger_trigger_highprio(loggerCtx, CFG_LOGGER_HP_QUEUE_FULL_IDX, xTaskGetTickCount());
         }
         else
         {
-            logger_trigger_highprio(loggerCtx, 0, xTaskGetTickCount()); // Trigger high-priority log if allocation fails
+            logger_trigger_highprio(loggerCtx, CFG_LOGGER_HP_QUEUE_FULL_IDX, xTaskGetTickCount());
         }
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(TEST_TASK_PERIOD_MS));
     }
