@@ -46,6 +46,7 @@ Logger_Entry_T *logger_alloc_entry(Logger_Context_T *ctx)
         {
 
             ctx->regular_log_pool[i].is_formatted = false;
+            memset(ctx->regular_log_pool[i].prefix, 0, LOGGER_PREFIX_SIZE);
             return &(ctx->regular_log_pool[i]);
         }
     }
@@ -77,13 +78,7 @@ void logger_trigger_highprio(Logger_Context_T *ctx, uint8_t idx, uint32_t timest
     if (!entry)
         return;
 
-    if (entry->length > entry->base_length)
-    {
-        uint8_t diff = entry->length - entry->base_length;
-        memmove(entry->msg, entry->msg + diff, entry->base_length);
-        memset(entry->msg + entry->base_length, 0, diff);
-        entry->length = entry->base_length;
-    }
+    memset(entry->prefix, 0, LOGGER_PREFIX_SIZE);
     entry->timestamp = timestamp;
     entry->in_use = true;
     entry->is_formatted = false;
@@ -109,7 +104,7 @@ void logger_tx_scheduler(Logger_Context_T *ctx)
             bool isSent = false;
             if (format_log_entry(entry))
             {
-                isSent = UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
+                isSent = UartDma_Transmit((uint8_t *)&entry->prefix[0], entry->length + LOGGER_PREFIX_SIZE);
             }
             else
             {
@@ -142,7 +137,7 @@ void logger_tx_scheduler(Logger_Context_T *ctx)
         bool isReady = entry->is_formatted ? true : format_log_entry(entry);
         if (isReady)
         {
-            isSent = UartDma_Transmit((uint8_t *)&entry->msg[0], entry->length);
+            isSent = UartDma_Transmit((uint8_t *)&entry->prefix[0], entry->length + LOGGER_PREFIX_SIZE);
         }
 
         if (isSent)
@@ -243,40 +238,24 @@ static inline Logger_Entry_T *peek_normal_log(Logger_Context_T *ctx)
 }
 
 /**
- * @brief Prepends a timestamp to a log entry's message buffer in-place.
+ * @brief Format a log entry's prefix with the timestamp.
  * @param entry Pointer to the Logger_Entry_T to modify.
- * @return true if formatting succeeded, false if buffer would overflow.
+ * @return true if formatting succeeded.
  */
 static bool format_log_entry(Logger_Entry_T *entry)
 {
     uint32_t ts = entry->timestamp;
-    char ts_buf[12]; // e.g., "[123456] "
-    uint8_t ts_len = 0;
-
-    ts_buf[ts_len++] = '[';
-    uint32_t div = 1000000000;
-    bool started = false;
-    while (div > 0)
+    entry->prefix[0] = '[';
+    for (int i = 6; i >= 1; i--)
     {
-        uint32_t digit = ts / div;
-        if (digit || started || div == 1)
-        {
-            ts_buf[ts_len++] = '0' + digit;
-            started = true;
-        }
-        ts = ts % div;
-        div /= 10;
+        entry->prefix[i] = '0' + (ts % 10);
+        ts /= 10;
     }
-    ts_buf[ts_len++] = ']';
-    ts_buf[ts_len++] = ' ';
+    entry->prefix[7] = ']';
 
-    if ((entry->length + ts_len) >= LOGGER_LOG_ENTRY_BUFFER_SIZE)
+    if (entry->length >= LOGGER_LOG_ENTRY_BUFFER_SIZE)
         return false;
 
-    memmove(&entry->msg[ts_len], &entry->msg[0], entry->length);
-    memcpy(&entry->msg[0], ts_buf, ts_len);
-    entry->length += ts_len;
     entry->is_formatted = true;
-
     return true;
 }
