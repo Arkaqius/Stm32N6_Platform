@@ -34,21 +34,20 @@
  * ::logger_alloc_entry so they are taken from the internal memory pool.
  */
 #define LOGGER_DEFINE_HIGHPRIO_ENTRY(name, literal) \
-    static Logger_Entry_T name = {                 \
-        .prefix = {0},                            \
-        .msg = literal,                           \
-        .length = sizeof(literal) - 1,            \
-        .base_length = sizeof(literal) - 1,       \
-        .in_use = false,                          \
-        .is_formatted = false                    \
-    }
+    static Logger_Entry_T name = {                  \
+        .prefix = {0},                              \
+        .msg = literal,                             \
+        .length = sizeof(literal) - 1,              \
+        .base_length = sizeof(literal) - 1,         \
+        .in_use = false,                            \
+        .is_formatted = false}
 
 /**
  * @brief Log entry structure
  */
 typedef struct
 {
-    char prefix[LOGGER_PREFIX_SIZE];             /**< Formatted prefix */
+    char prefix[LOGGER_PREFIX_SIZE];           /**< Formatted prefix */
     uint8_t msg[LOGGER_LOG_ENTRY_BUFFER_SIZE]; /**< Log message text */
     uint8_t length;                            /**< Length of the message */
     uint8_t base_length;                       /**< Length of the template message */

@@ -78,7 +78,7 @@ void logger_trigger_highprio(Logger_Context_T *ctx, uint8_t idx, uint32_t timest
     if (!entry)
         return;
 
-    memset(entry->prefix, 0, LOGGER_PREFIX_SIZE);
+    memset(entry->prefix, 0, LOGGER_PREFIX_SIZE); /* Clear prefix */
     entry->timestamp = timestamp;
     entry->in_use = true;
     entry->is_formatted = false;
