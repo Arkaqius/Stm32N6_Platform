@@ -31,7 +31,7 @@ if %errorlevel% neq 0 (
 :: Doxygen 
 where doxygen >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [!] Git not found. Installing via winget...
+    echo [!] Doxygen not found. Installing via winget...
     winget install -e --id DimitriVanHeesch.Doxygen
 ) else (
     echo [✓] Doxygen already installed.
@@ -40,7 +40,7 @@ if %errorlevel% neq 0 (
 :: Dot 
 where dot >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [!] Git not found. Installing via winget...
+    echo [!] Dot (Graphiv) not found. Installing via winget...
     winget install -e --id Graphviz.Graphviz
 ) else (
     echo [✓] Dot (Graphiv) already installed.
