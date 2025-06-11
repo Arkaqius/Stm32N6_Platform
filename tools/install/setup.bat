@@ -32,9 +32,9 @@ if %errorlevel% neq 0 (
 where doxygen >nul 2>&1
 if %errorlevel% neq 0 (
     echo [!] Git not found. Installing via winget...
-    winget install -e --id Doxygen.Doxygen
+    winget install -e --id DimitriVanHeesch.Doxygen
 ) else (
-    echo [✓] Git already installed.
+    echo [✓] Doxygen already installed.
 )
 
 :: Dot 
@@ -43,7 +43,7 @@ if %errorlevel% neq 0 (
     echo [!] Git not found. Installing via winget...
     winget install -e --id Graphviz.Graphviz
 ) else (
-    echo [✓] Git already installed.
+    echo [✓] Dot (Graphiv) already installed.
 )
 
 echo [✓] Setup complete. Open "workspace" in VS Code
