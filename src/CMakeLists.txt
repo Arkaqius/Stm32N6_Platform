@@ -59,3 +59,15 @@ target_link_libraries(${PROJECT_NAME}
        infra
 
 )
+
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    set(DOXYFILE ${CMAKE_SOURCE_DIR}/../docs/Doxyfile)
+    add_custom_target(doc
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../docs
+        COMMENT "Generate API documentation"
+        VERBATIM
+    )
+endif()
+
