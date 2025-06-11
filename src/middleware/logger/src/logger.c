@@ -110,10 +110,6 @@ void logger_tx_scheduler(Logger_Context_T *ctx)
             {
                 /* Raise fault */
             }
-            else
-            {
-                /* Raise fault */
-            }
 
             if (isSent)
             {
@@ -181,7 +177,6 @@ void logger_register_highprio(Logger_Context_T *ctx, uint8_t idx, Logger_Entry_T
 void logger_tx_task(void *arg)
 {
     Logger_Context_T *ctx = (Logger_Context_T *)arg;
-    logger_register_highprio(ctx, 1, &logger_full_entry); // Register a high-priority log entry
 
     while (1)
     {
