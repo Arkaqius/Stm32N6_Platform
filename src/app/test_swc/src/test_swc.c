@@ -56,7 +56,6 @@ static void TestTask(void *pvParameters)
             strcpy((char *)entry->msg, testMessage); // Copy the test message into the log entry
             entry->length = sizeof(testMessage) - 1; // Set the length of the message
             logger_commit_entry(loggerCtx, entry);   // Commit the log entry for transmission
-            logger_trigger_highprio(loggerCtx, CFG_LOGGER_ALLOC_FAILED, xTaskGetTickCount());
         }
         else
         {

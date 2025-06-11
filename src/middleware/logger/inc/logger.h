@@ -49,8 +49,8 @@ typedef struct
 {
     char prefix[LOGGER_PREFIX_SIZE];           /**< Formatted prefix */
     uint8_t msg[LOGGER_LOG_ENTRY_BUFFER_SIZE]; /**< Log message text */
-    uint8_t length;                            /**< Length of the message */
-    uint8_t base_length;                       /**< Length of the template message */
+    uint32_t length;                           /**< Length of the message */
+    uint32_t base_length;                      /**< Length of the template message */
     uint32_t timestamp;                        /**< Log timestamp */
     bool in_use;                               /**< Allocation flag */
     bool is_formatted;                         /**< Timestamp already prepended */
