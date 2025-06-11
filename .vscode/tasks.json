@@ -2,6 +2,22 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Generate Documentation",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--target",
+                "doc",
+                "--",
+                "--no-print-directory"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Generate documentation using the doc target"
+        },
+        {
             "label": "Generate Build System",
             "type": "shell",
             "command": "cmake",
