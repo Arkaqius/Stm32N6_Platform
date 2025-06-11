@@ -23,6 +23,8 @@
 /* Defines -------------------------------------------------------------------*/
 #define USED_UART_INSTANCE USART1 /**< Define the UART instance to be used */
 
+/* Local Types and Typedefs -------------------------------------------------*/
+
 /* Global Variables ----------------------------------------------------------*/
 /**
  * @brief UART DMA handler instance.
@@ -43,10 +45,13 @@ static bool UartDma_ErrorHandler(void);
 /** Create internal FreeRTOS tasks used by the driver. */
 static void UartDma_TasksInit(void);
 
+/* Public Functions Implementation ------------------------------------------*/
 /**
  * @brief Initialize the UART DMA module.
  *
- * Configures GPIO, USART, and DMA peripherals, and starts associated FreeRTOS tasks.
+ * Configures the GPIO pins, USART instance and DMA channel required for
+ * transmission.  It then creates the internal driver tasks.  The function
+ * must be called once before using ::UartDma_Transmit.
  *
  * @return true if initialization was successful.
  */
@@ -62,12 +67,15 @@ bool UartDma_Init(void)
 /**
  * @brief Attempt to transmit data using DMA in a non-blocking fashion.
  *
- * This function uses an exclusive LDREX/STREX based lock to avoid contention
- * and ensures zero-copy, low-latency transmission scheduling.
+ * An atomic LDREX/STREX lock protects the DMA channel so that callers never
+ * block.  If the hardware is busy the transfer is rejected immediately and
+ * should be retried by the caller.
  *
  * @param[in] data Pointer to the data buffer to transmit.
  * @param[in] size Number of bytes to transmit.
- * @return true if transmission was scheduled successfully, false otherwise.
+ *
+ * @retval true  Transmission scheduled successfully.
+ * @retval false DMA was busy or the parameters were invalid.
  */
 bool UartDma_Transmit(const uint8_t *data, uint16_t size)
 {
@@ -104,10 +112,17 @@ bool UartDma_Transmit(const uint8_t *data, uint16_t size)
     return true;
 }
 
+/* Private Functions Implementation -----------------------------------------*/
+
 /**
  * @brief Configure and enable the USART peripheral used for logging.
  *
- * @return true on successful initialization, false otherwise.
+ * The USART is initialised in asynchronous transmit-only mode with a fixed
+ * baud rate of 115200. DMA requests for transmission are enabled once the
+ * peripheral configuration is complete.
+ *
+ * @retval true  USART configured successfully.
+ * @retval false Configuration failed.
  */
 static bool UartDma_InitUsart(void)
 {
@@ -138,7 +153,10 @@ static bool UartDma_InitUsart(void)
 /**
  * @brief Initialize GPIO pins associated with the USART peripheral.
  *
- * @return true on successful initialization.
+ * The TX and RX pins are configured for alternate function mode using the
+ * highest supported speed. No pull resistors are enabled.
+ *
+ * @retval true  Pins configured successfully.
  */
 static bool UartDma_InitGpio(void)
 {
@@ -159,7 +177,11 @@ static bool UartDma_InitGpio(void)
 /**
  * @brief Configure the DMA channel used for USART transmissions.
  *
- * @return true on successful configuration.
+ * The DMA is set up for memory-to-peripheral transfers with incrementing
+ * source addresses. Interrupts are enabled to release the lock on transfer
+ * completion or error.
+ *
+ * @retval true  Configuration succeeded.
  */
 static bool UartDma_InitDma(void)
 {
@@ -190,8 +212,9 @@ static bool UartDma_InitDma(void)
 /**
  * @brief Handle DMA error conditions.
  *
- * This implementation currently performs no recovery and simply
- * returns false.
+ * This implementation currently performs no recovery other than
+ * reporting failure to the caller. It can be extended to reset the
+ * DMA hardware or reconfigure the peripheral after an error occurs.
  */
 static bool UartDma_ErrorHandler(void)
 {
@@ -200,6 +223,10 @@ static bool UartDma_ErrorHandler(void)
 
 /**
  * @brief Create internal tasks required by the UART DMA driver.
+ *
+ * Currently only a placeholder task is created which can be extended
+ * to implement additional features such as timeouts or background
+ * processing.
  */
 static void UartDma_TasksInit(void)
 {
@@ -209,7 +236,10 @@ static void UartDma_TasksInit(void)
 /**
  * @brief Background task used for future driver extensions.
  *
- * @param pvParameters Unused parameter.
+ * Currently the task simply sleeps and can be expanded to monitor
+ * transmission timeouts or implement queued transmission support.
+ *
+ * @param[in] pvParameters Unused parameter.
  */
 static void UartDma_MainTask(void *pvParameters)
 {
@@ -222,7 +252,9 @@ static void UartDma_MainTask(void *pvParameters)
 /**
  * @brief DMA interrupt handler for UART DMA channel.
  *
- * Clears transfer complete or error flags and releases the DMA lock.
+ * Clears transfer complete or error flags and releases the DMA lock so
+ * that new transmissions may be scheduled. Error conditions are passed
+ * to ::UartDma_ErrorHandler for further processing.
  *
  * @bug Add it to ISR manager
  */

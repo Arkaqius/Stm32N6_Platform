@@ -1,8 +1,10 @@
 /**
  * @file test_swc.c
- * @brief Source file for Test Software Component
+ * @brief Implementation of the Test Software Component
  *
- * This file implements the initialization and task handling for the Test SWC.
+ * The Test SWC periodically allocates a log entry, fills it with a fixed
+ * string and commits it for transmission over the UART DMA driver.  It
+ * demonstrates how the logger can be used from an application task.
  */
 
 /* Includes -----------------------------------------------------------------*/
@@ -18,12 +20,23 @@
 /* Defines ------------------------------------------------------------------*/
 #define TEST_TASK_PERIOD_MS (1U) /**< Period of the demo task in milliseconds */
 
+/* Local Types and Typedefs -------------------------------------------------*/
+
+/* Global Variables ---------------------------------------------------------*/
 /** Test message sent over UART DMA for demonstration purposes. */
 static char testMessage[] = "Hello\r\n";
+
 /* Private Function Prototypes ----------------------------------------------*/
 static void TestTask(void *pvParameters);
 
 /* Public Functions Implementation ------------------------------------------*/
+/**
+ * @brief Initialize the Test Software Component.
+ *
+ * Sets up the UART DMA driver and creates the FreeRTOS task that
+ * periodically logs a demo string.  Should be called once during
+ * application start-up.
+ */
 void TestSWC_Init(void)
 {
     // Initialize the UART DMA module
@@ -35,11 +48,14 @@ void TestSWC_Init(void)
 
 /* Private Functions Implementation -----------------------------------------*/
 /**
- * @brief Task function for Test SWC
+ * @brief Periodic task demonstrating logger usage.
  *
- * This task runs periodically every 100ms.
+ * Allocates a log entry every cycle, copies the demo string into the
+ * entry buffer and commits it for asynchronous transmission.  When no
+ * entry is available the high priority "allocation failed" message is
+ * triggered instead.
  *
- * @param[in] pvParameters Task parameters (not used)
+ * @param[in] pvParameters Unused task parameter.
  */
 static void TestTask(void *pvParameters)
 {

@@ -1,8 +1,10 @@
 /**
  * @file test_swc.h
- * @brief Header file for Test Software Component
+ * @brief Interface for the demonstration Test Software Component
  *
- * This file provides the interface for initializing the Test SWC.
+ * This module periodically transmits a short message using the logger and
+ * UART DMA drivers.  It serves as a template for new application software
+ * components and showcases integration of the middleware modules.
  */
 
 #ifndef TEST_SWC_H
@@ -12,11 +14,17 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+/* Macros and Defines -------------------------------------------------------*/
+
+/* Typedefs -----------------------------------------------------------------*/
+
 /* Exported Functions -------------------------------------------------------*/
 /**
- * @brief Initialize the Test Software Component
+ * @brief Initialize the Test Software Component.
  *
- * This function creates the FreeRTOS task for the Test SWC.
+ * The routine sets up peripheral dependencies and spawns the periodic
+ * demonstration task.  It should be called once during system start-up
+ * after the middleware drivers have been initialized.
  */
 void TestSWC_Init(void);
 

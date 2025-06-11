@@ -1,30 +1,40 @@
 /**
  * @file logger.h
  * @brief Public interface for the real-time logger component
+ *
+ * The logger provides time-stamped debug output with separate pools for
+ * high-priority and normal messages. It is designed to be ISR-safe and
+ * to operate without dynamic memory allocation.
  */
 
 #ifndef LOGGER_H
 #define LOGGER_H
 
+/* Includes -----------------------------------------------------------------*/
 #include <stdint.h>
 #include <stdbool.h>
-#include "logger_cfg.h" /* Default logger cfg */
-#include "cfg_logger.h" /* Project logger cfg */
-#include "FreeRTOS.h"   /* FreeRTOS definitions */
-#include "task.h"       /* FreeRTOS task definitions */
-
+#include "logger_cfg.h"
+#include "cfg_logger.h"
+#include "FreeRTOS.h"
+#include "task.h"
+/* Macros and Defines -------------------------------------------------------*/
 /**
  * @brief Helper macro to statically initialize a ::Logger_Context_T object.
+ *
+ * All counters and buffers are cleared so the logger starts in a
+ * known state.
  */
-#define LOGGER_CONTEXT_INIT {  \
-    .high_prio_mask = 0,       \
-    .high_prio_registry = {0}, \
-    .regular_log_pool = {0},   \
-    .regular_log_queue = {0},  \
-    .log_head = 0,             \
-    .log_tail = 0,             \
-    .debug_buffer = {0},       \
-    .debug_idx = 0}
+#define LOGGER_CONTEXT_INIT                                                            \
+    {                                                                                 \
+        .high_prio_mask = 0,                                                          \
+        .high_prio_registry = {0},                                                    \
+        .regular_log_pool = {0},                                                      \
+        .regular_log_queue = {0},                                                     \
+        .log_head = 0,                                                                \
+        .log_tail = 0,                                                                \
+        .debug_buffer = {0},                                                          \
+        .debug_idx = 0                                                                \
+    }
 
 /**
  * @brief Convenience macro for defining static high-priority log entries.
@@ -40,7 +50,17 @@
         .length = sizeof(literal) - 1,              \
         .base_length = sizeof(literal) - 1,         \
         .in_use = false,                            \
-        .is_formatted = false}
+        .is_formatted = false                      \
+    }
+
+/**
+ * @brief Convenience macro for defining static high-priority log entries.
+ *
+ * The created ::Logger_Entry_T is stored in read-only memory and can be
+ * triggered directly from interrupts using ::logger_trigger_highprio.
+ * Normal log entries should instead be allocated from the logger pool.
+ */
+
 
 /**
  * @brief Log entry structure
@@ -100,15 +120,26 @@ void logger_tx_scheduler(Logger_Context_T *ctx);
 
 /**
  * @brief RTOS task function that handles logger transmission
- * @param arg Unused
+ *
+ * The task waits for notifications from producers and forwards log
+ * entries to the underlying UART DMA driver. It should be created with
+ * a small stack size and runs at a low priority.
+ *
+ * @param arg Unused pointer to the logger context
  */
 void logger_tx_task(void *arg);
 
 /**
  * @brief Store a 32-bit debug value for later inspection
+ *
+ * Values recorded with this API are stored in a circular buffer inside
+ * the ::Logger_Context_T structure. They can be examined using a debugger
+ * when tracing complex issues.
+ *
  * @param value Value to record in the debug buffer
  */
 void logger_debug_push(Logger_Context_T *ctx, uint32_t value);
 
 void logger_register_highprio(Logger_Context_T *ctx, uint8_t idx, Logger_Entry_T *entry);
-#endif // LOGGER_H
+
+#endif /* LOGGER_H */
