@@ -16,7 +16,7 @@
 #include <string.h>     // For string operations
 
 /* Defines ------------------------------------------------------------------*/
-#define TEST_TASK_PERIOD_MS 1 /**< Period of the demo task in milliseconds */
+#define TEST_TASK_PERIOD_MS (1U) /**< Period of the demo task in milliseconds */
 
 /** Test message sent over UART DMA for demonstration purposes. */
 static char testMessage[] = "Hello\r\n";
@@ -59,7 +59,7 @@ static void TestTask(void *pvParameters)
         }
         else
         {
-            // logger_trigger_highprio(loggerCtx, CFG_LOGGER_ALLOC_FAILED, xTaskGetTickCount());
+            logger_trigger_highprio(loggerCtx, CFG_LOGGER_ALLOC_FAILED, xTaskGetTickCount());
         }
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(TEST_TASK_PERIOD_MS));
     }

@@ -205,8 +205,8 @@ static inline void enqueue_normal_log(Logger_Context_T *ctx, Logger_Entry_T *ent
     }
     else
     {
-        logger_trigger_highprio(ctx, CFG_LOGGER_HP_QUEUE_FULL_IDX, xTaskGetTickCount());
-        entry->in_use = false; // Drop log if queue full
+        logger_debug_push(ctx, entry->timestamp); // Log queue full
+        entry->in_use = false;                    // Drop log if queue full
         entry->is_formatted = false;
     }
 }
