@@ -140,7 +140,7 @@ static DevM_ReturnType DevM_StateInitBswPreOS(void)
  */
 static DevM_ReturnType DevM_StateInitMiddlewarePreOS(void)
 {
-
+    Cfg_Logger_Init();
     return DEVM_OK;
 }
 /**

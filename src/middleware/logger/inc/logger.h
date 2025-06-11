@@ -27,13 +27,30 @@
     .debug_idx = 0}
 
 /**
+ * @brief Convenience macro for defining static high-priority log entries.
+ *
+ * This helper should only be used for high-priority messages that are
+ * statically allocated. Regular log entries must be obtained via
+ * ::logger_alloc_entry so they are taken from the internal memory pool.
+ */
+#define LOGGER_DEFINE_HIGHPRIO_ENTRY(name, literal) \
+    static Logger_Entry_T name = {                  \
+        .prefix = {0},                              \
+        .msg = literal,                             \
+        .length = sizeof(literal) - 1,              \
+        .base_length = sizeof(literal) - 1,         \
+        .in_use = false,                            \
+        .is_formatted = false}
+
+/**
  * @brief Log entry structure
  */
 typedef struct
 {
+    char prefix[LOGGER_PREFIX_SIZE];           /**< Formatted prefix */
     uint8_t msg[LOGGER_LOG_ENTRY_BUFFER_SIZE]; /**< Log message text */
-    uint8_t length;                            /**< Length of the message */
-    uint8_t base_length;                       /**< Length of the template message */
+    uint32_t length;                           /**< Length of the message */
+    uint32_t base_length;                      /**< Length of the template message */
     uint32_t timestamp;                        /**< Log timestamp */
     bool in_use;                               /**< Allocation flag */
     bool is_formatted;                         /**< Timestamp already prepended */

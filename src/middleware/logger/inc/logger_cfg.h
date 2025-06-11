@@ -23,4 +23,8 @@
 #define LOGGER_DEBUG_BUFFER_SIZE (1024U) /**< Default size of the debug value buffer */
 #endif
 
+#ifndef LOGGER_PREFIX_SIZE
+#define LOGGER_PREFIX_SIZE (8U) /**< Fixed size of the formatted prefix */
+#endif
+
 #endif // LOGGER_CFG_H

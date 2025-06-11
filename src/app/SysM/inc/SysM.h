@@ -24,4 +24,9 @@
  */
 Logger_Context_T *Cfg_Logger_GetContext(void);
 
+/**
+ * @brief Initialize the application logger and register static messages.
+ */
+void Cfg_Logger_Init(void);
+
 #endif /* SYSM_H */
