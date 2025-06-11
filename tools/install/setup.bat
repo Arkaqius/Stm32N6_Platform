@@ -5,7 +5,7 @@ echo === Embedded Toolchain Setup for Windows ===
 where arm-none-eabi-gcc >nul 2>&1
 if %errorlevel% neq 0 (
     echo [!] arm-none-eabi-gcc not found. Installing via winget...
-    winget install -e --id Arm.GNUArmEmbeddedToolchain
+    winget install -e --id Arm.GnuArmEmbeddedToolchain
 ) else (
     echo [✓] arm-none-eabi-gcc already installed.
 )
