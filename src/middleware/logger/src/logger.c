@@ -1,8 +1,14 @@
 /**
  * @file logger.c
  * @brief Real-time, dual-priority, ISR-safe, zero-copy logger implementation
+ *
+ * This source file contains the core logic of the logger component. Log
+ * entries are formatted with a timestamp and transmitted using the UART
+ * DMA driver. Both high-priority and normal entries share the same code
+ * path so the implementation remains compact.
  */
 
+/* Includes -----------------------------------------------------------------*/
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
@@ -12,6 +18,13 @@
 #include "task.h"
 #include "cmsis_gcc.h"
 
+/* Defines ------------------------------------------------------------------*/
+
+/* Local Types and Typedefs -------------------------------------------------*/
+
+/* Global Variables ---------------------------------------------------------*/
+
+/* Private Function Prototypes ----------------------------------------------*/
 /* High-priority log entries are defined by the application and
  * registered via ::logger_register_highprio. */
 /** Remove and return the next regular log entry from the queue. */
@@ -22,6 +35,9 @@ static inline void enqueue_normal_log(Logger_Context_T *ctx, Logger_Entry_T *ent
 static inline Logger_Entry_T *peek_normal_log(Logger_Context_T *ctx);
 /** Format a log entry by prepending a timestamp. */
 static bool format_log_entry(Logger_Entry_T *entry);
+
+/* Public Functions Implementation ------------------------------------------*/
+
 /*** Logger API ***/
 /**
  * @brief Allocates a log entry from the static pool.
@@ -191,7 +207,7 @@ void logger_debug_push(Logger_Context_T *ctx, uint32_t value)
     ctx->debug_buffer[idx % LOGGER_DEBUG_BUFFER_SIZE] = value;
 }
 
-/*** Helper Functions ***/
+/* Private Functions Implementation -----------------------------------------*/
 /**
  * @brief Place a log entry into the regular log queue.
  */
@@ -239,6 +255,11 @@ static inline Logger_Entry_T *peek_normal_log(Logger_Context_T *ctx)
 
 /**
  * @brief Format a log entry's prefix with the timestamp.
+ *
+ * The timestamp is converted into a fixed width decimal string enclosed
+ * in square brackets and stored in the entry prefix buffer. The function
+ * does not modify the actual log message.
+ *
  * @param entry Pointer to the Logger_Entry_T to modify.
  * @return true if formatting succeeded.
  */
