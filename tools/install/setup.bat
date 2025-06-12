@@ -28,6 +28,15 @@ if %errorlevel% neq 0 (
     echo [✓] Git already installed.
 )
 
+:: Dot 
+where make >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [!] Make not found. Installing via winget...
+    winget install -e --id GnuWin32.Make
+) else (
+    echo Make already installed.
+)
+
 :: Doxygen 
 where doxygen >nul 2>&1
 if %errorlevel% neq 0 (
