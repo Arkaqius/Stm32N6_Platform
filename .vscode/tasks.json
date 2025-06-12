@@ -24,11 +24,11 @@
             "args": [
                 "-G",
                 "Unix Makefiles",
-                "-DCMAKE_TOOLCHAIN_FILE=C:/STM32N6/03_Repos/proj/src/_cmake/toolchain.cmake",
+                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/src/_cmake/toolchain.cmake",
                 "-B",
                 "build",
                 "-S",
-                "src",
+                "src"
             ],
             "group": {
                 "kind": "build",
@@ -47,7 +47,7 @@
                 "--build",
                 "build",
                 "--",
-                "--no-print-directory",
+                "--no-print-directory"
             ],
             "group": "build",
             "problemMatcher": [
@@ -65,27 +65,13 @@
                 "--target",
                 "clean",
                 "--",
-                "--no-print-directory",
+                "--no-print-directory"
             ],
             "group": "build",
             "problemMatcher": [
                 "$gcc"
             ],
             "detail": "Clean build files using CMake"
-        },
-        {
-            "label": "Full Clean & Rebuild",
-            "type": "shell",
-            "command": "cmd",
-            "args": [
-                "/C",
-                "rmdir /s /q build && cmake -G \"Unix Makefiles\" -DCMAKE_TOOLCHAIN_FILE=C:/STM32N6/03_Repos/proj/src/_cmake/toolchain.cmake -B build -S src && cmake --build build -- --no-print-directory"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "detail": "Delete the build directory, generate the build system, and perform a full rebuild"
         }
     ]
 }
