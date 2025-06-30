@@ -7,6 +7,7 @@ set(COMPONENT_NAME "app_layer")
 add_subdirectory(test_swc)
 add_subdirectory(DevM)
 add_subdirectory(SysM)
+add_subdirectory(fault_response)
 
 add_library(${COMPONENT_NAME} INTERFACE)
 target_link_libraries(${COMPONENT_NAME}
@@ -16,4 +17,5 @@ target_link_libraries(${COMPONENT_NAME}
         HAL_Drv
         cfg_layer
         cmsis
-)        
+        fault_response
+)

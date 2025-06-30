@@ -3,8 +3,9 @@ cmake_minimum_required(VERSION 3.22)
 # Set a variable for the component (library) name
 set(COMPONENT_NAME "middleware_layer")
 
-# Subdirs 
+# Subdirs
 add_subdirectory(logger)
+add_subdirectory(fault)
 
 add_library(${COMPONENT_NAME} INTERFACE)
 target_link_libraries(${COMPONENT_NAME}
@@ -13,4 +14,6 @@ target_link_libraries(${COMPONENT_NAME}
         HAL_Drv
         cfg_layer
         cmsis
-)        
+        fault_mgmt
+)
+
