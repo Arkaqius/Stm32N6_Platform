@@ -1,13 +1,34 @@
+/**
+ * @file fault_response.c
+ * @brief Application fault response manager
+ *
+ * Provides a simple lookup table of callbacks that are invoked when faults
+ * transition state.  This allows application code to react to fault events
+ * without adding dependencies to the middleware layer.
+ */
+
+/* Includes -----------------------------------------------------------------*/
 #include "fault_response.h"
 
-typedef struct {
-    Fault_T *fault;
-    FaultResponseHook hook;
+/* Local Types and Typedefs -------------------------------------------------*/
+/** Entry linking a fault to its response hook. */
+typedef struct
+{
+    Fault_T           *fault; /**< Fault to monitor */
+    FaultResponseHook  hook;  /**< Hook invoked on transition */
 } FaultResponseEntry;
 
+/* Global Variables ---------------------------------------------------------*/
 static FaultResponseEntry response_table[FAULT_RESPONSE_MANAGER_MAX_ENTRIES];
-static uint8_t response_count = 0;
+static uint8_t           response_count = 0;
 
+/* Public Functions Implementation ------------------------------------------*/
+/**
+ * @brief Register a response hook for a fault.
+ *
+ * @param[in] fault Fault instance to monitor.
+ * @param[in] hook  Callback invoked on state changes.
+ */
 void FaultResponseManager_Register(Fault_T *fault, FaultResponseHook hook)
 {
     if (response_count >= FAULT_RESPONSE_MANAGER_MAX_ENTRIES) {
@@ -19,6 +40,12 @@ void FaultResponseManager_Register(Fault_T *fault, FaultResponseHook hook)
     response_count++;
 }
 
+/**
+ * @brief Dispatch a fault transition to its registered hook.
+ *
+ * @param[in] fault     Fault instance that changed.
+ * @param[in] new_state true if the fault became active.
+ */
 void FaultResponseManager_Dispatch(Fault_T *fault, bool new_state)
 {
     for (uint8_t i = 0; i < response_count; ++i) {

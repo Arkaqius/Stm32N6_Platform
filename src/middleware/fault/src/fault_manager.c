@@ -1,8 +1,21 @@
+/**
+ * @file fault_manager.c
+ * @brief Implementation of the periodic fault manager
+ *
+ * Evaluates all registered faults once per tick and dispatches state changes
+ * to the optional Fault Response Manager.
+ */
+
+/* Includes -----------------------------------------------------------------*/
 #include "fault_manager.h"
 
 /* Forward declaration to decouple from the application component */
 void FaultResponseManager_Dispatch(Fault_T *fault, bool new_state);
 
+/* Private Functions --------------------------------------------------------*/
+/**
+ * @brief Check if a fault is shadowed by any other active fault.
+ */
 static bool is_shadowed(const Fault_T *f)
 {
     for (uint8_t i = 0; i < f->shadow_count; ++i) {
@@ -13,6 +26,12 @@ static bool is_shadowed(const Fault_T *f)
     return false;
 }
 
+/* Public Functions Implementation ------------------------------------------*/
+/**
+ * @brief Evaluate all faults managed by the given manager.
+ *
+ * @param[in,out] mgr Manager instance containing the fault list.
+ */
 void FaultManager_Tick(FaultManager_T *mgr)
 {
     if (!mgr) {
@@ -44,6 +63,13 @@ void FaultManager_Tick(FaultManager_T *mgr)
     }
 }
 
+/**
+ * @brief Determine if any fault is active.
+ *
+ * @param[in] mgr Manager instance to query.
+ *
+ * @return true when at least one fault reports active.
+ */
 bool FaultManager_IsAnyFaultActive(FaultManager_T *mgr)
 {
     if (!mgr) {
@@ -58,6 +84,11 @@ bool FaultManager_IsAnyFaultActive(FaultManager_T *mgr)
     return false;
 }
 
+/**
+ * @brief Force all managed faults inactive.
+ *
+ * @param[in,out] mgr Manager instance.
+ */
 void FaultManager_ForceAllClear(FaultManager_T *mgr)
 {
     if (!mgr) {
