@@ -14,7 +14,7 @@ target_link_libraries(${COMPONENT_NAME}
         cfg_layer
         HAL_Drv
         uartDma
-        SysM
+        DevM
 )
 target_include_directories(${COMPONENT_NAME}
     PUBLIC

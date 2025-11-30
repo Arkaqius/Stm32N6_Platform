@@ -15,6 +15,11 @@ target_include_directories(${COMPONENT_NAME}
         "${CMAKE_CURRENT_SOURCE_DIR}/inc"
 )
 
+target_include_directories(${COMPONENT_NAME}
+    PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/internal"
+)
+
 target_link_libraries(${COMPONENT_NAME}
     PUBLIC
         os

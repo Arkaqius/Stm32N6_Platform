@@ -13,6 +13,8 @@
 #include "queue.h"
 #include "DevM_PreOS.h"
 #include "DevM_Runtime.h"
+#include "cfg_logger.h"
+#include "logger.h"
 /* Defines ------------------------------------------------------------------*/
 
 /* Local Types and Typedefs -------------------------------------------------*/
@@ -20,6 +22,13 @@
 /* Global Variables ---------------------------------------------------------*/
 /**< Current state of the Device Manager state machine. */
 static DevM_StateType currentState = DEVM_STATE_FAULT;
+/**
+ * @brief Statically allocated application logger context.
+ */
+static Logger_Context_T logger_context = LOGGER_CONTEXT_INIT;
+
+LOGGER_DEFINE_HIGHPRIO_ENTRY(hp_queue_full, CFG_LOGGER_HP_QUEUE_FULL_MSG);
+LOGGER_DEFINE_HIGHPRIO_ENTRY(hp_alloc_failed, CFG_LOGGER_HP_QUEUE_FULL_MSG);
 
 /* Private Function Prototypes ----------------------------------------------*/
 static DevM_ReturnType DevM_StateRun(void);
@@ -82,6 +91,22 @@ static DevM_ReturnType DevM_StateSoftRestart(void)
 {
     /* TODO Make Soft reset */
     return DEVM_OK;
+}
+
+Logger_Context_T *Cfg_Logger_GetContext(void)
+{
+    return &logger_context;
+}
+
+void Cfg_Logger_Init(void)
+{
+    logger_register_highprio(&logger_context,
+                             CFG_LOGGER_HP_QUEUE_FULL_IDX,
+                             &hp_queue_full);
+
+    logger_register_highprio(&logger_context,
+                             CFG_LOGGER_ALLOC_FAILED,
+                             &hp_alloc_failed);
 }
 
 /**

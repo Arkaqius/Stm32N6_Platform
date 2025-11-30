@@ -5,7 +5,7 @@ set(COMPONENT_NAME "middleware_layer")
 
 # Subdirs
 add_subdirectory(logger)
-add_subdirectory(fault)
+add_subdirectory(FaultManager)
 
 add_library(${COMPONENT_NAME} INTERFACE)
 target_link_libraries(${COMPONENT_NAME}

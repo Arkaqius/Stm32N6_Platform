@@ -1,0 +1,149 @@
+Level,Name,Value,Description
+0,"CPU","598 Registers","CPU Registers"
+ 1,"Core","25 Registers","CPU registers"
+ 1,"Core_S","8 Registers","Secure CPU registers"
+ 1,"Core_NS","8 Registers","Non-Secure CPU registers"
+ 1,"FPU","33 Registers","FPU Registers"
+ 1,"FPU (Double)","17 Registers","FPU Registers (double-precision)"
+ 1,"Peripherals","507 Registers","Memory-Mapped CPU Registers"
+0,"Peripherals","16876 Registers","Memory-Mapped Registers"
+ 1,"ADC","152 Registers",
+  2,"ADC1","38 Registers","Analog-to-digital converters"
+   3,"ADC_ISR",0x0000001F,"ADC interrupt and status register"
+   3,"ADC_IER",0x00000000,"ADC interrupt enable register"
+   3,"ADC_CR",0x00000005,"ADC control register"
+   3,"ADC_CFGR1",0x80003000,"ADC configuration register"
+   3,"ADC_CFGR2",0x00000000,"ADC configuration register 2"
+   3,"ADC_SMPR1",0x00000000,"ADC sample time register 1"
+   3,"ADC_SMPR2",0x00000005,"ADC sample time register 2"
+   3,"ADC_PCSEL",0x00000400,"ADC channel preselection register"
+   3,"ADC_SQR1",0x00000280,"ADC regular sequence register 1"
+   3,"ADC_SQR2",0x00000000,"ADC regular sequence register 2"
+   3,"ADC_SQR3",0x00000000,"ADC regular sequence register 3"
+   3,"ADC_SQR4",0x00000000,"ADC regular sequence register 4"
+   3,"ADC_DR",0x00000514,"ADC regular data register"
+    4,"RDATA",b'00000000000000000000010100010100,"Regular data converted"
+   3,"ADC_JSQR",0x00000000,"ADC injected sequence register"
+   3,"ADC_OFCFGR1",0x00000000,"ADC offset 1 configuration register"
+   3,"ADC_OFCFGR2",0x00000000,"ADC offset 2 configuration register"
+   3,"ADC_OFCFGR3",0x00000000,"ADC offset 3 configuration register"
+   3,"ADC_OFCFGR4",0x00000000,"ADC offset 4 configuration register"
+   3,"ADC_OFR1",0x00000000,"ADC offset 1 register"
+   3,"ADC_OFR2",0x00000000,"ADC offset 2 register"
+   3,"ADC_OFR3",0x00000000,"ADC offset 3 register"
+   3,"ADC_OFR4",0x00000000,"ADC offset 4 register"
+   3,"ADC_GCOMP",0x00001000,"ADC gain compensation register"
+   3,"ADC_JDR1",0x00000000,"ADC injected channel 1 data register"
+   3,"ADC_JDR2",0x00000000,"ADC injected channel 2 data register"
+   3,"ADC_JDR3",0x00000000,"ADC injected channel 3 data register"
+   3,"ADC_JDR4",0x00000000,"ADC injected channel 4 data register"
+   3,"ADC_AWD2CR",0x00000000,"ADC Analog Watchdog 2 Configuration Register"
+   3,"ADC_AWD3CR",0x00000000,"ADC Analog Watchdog 3 Configuration Register"
+   3,"ADC_AWD1LTR",0x00000000,"ADC analog watchdog 1 lower threshold register"
+   3,"ADC_AWD1HTR",0x003FFFFF,"ADC analog watchdog 1 higher threshold register"
+   3,"ADC_AWD2LTR",0x00000000,"ADC analog watchdog 2 lower threshold register"
+   3,"ADC_AWD2HTR",0x003FFFFF,"ADC analog watchdog 2 higher threshold register"
+   3,"ADC_AWD3LTR",0x00000000,"ADC analog watchdog 3 lower threshold register"
+   3,"ADC_AWD3HTR",0x003FFFFF,"ADC analog watchdog 3 higher threshold register"
+   3,"ADC_DIFSEL",0x00000000,"ADC Differential mode selection register"
+   3,"ADC_CALFACT",0x00000000,"ADC calibration factors"
+   3,"ADC_OR",0x00000000,"ADC option register"
+  2,"ADC1_S","38 Registers","Analog-to-digital converters"
+  2,"ADC2","38 Registers","Analog-to-digital converters"
+  2,"ADC2_S","38 Registers","Analog-to-digital converters"
+ 1,"ADC12","8 Registers",
+ 1,"ADF","30 Registers",
+ 1,"BSEC","932 Registers",
+ 1,"CACHEAXI","30 Registers",
+ 1,"CRC","10 Registers",
+ 1,"CRYP","72 Registers",
+ 1,"CSI","88 Registers",
+ 1,"DBGMCU","26 Registers",
+ 1,"DCMI","22 Registers",
+ 1,"DCMIPP","480 Registers",
+ 1,"DLYBSD","8 Registers",
+ 1,"DMA2D","1070 Registers",
+ 1,"DTS","84 Registers",
+ 1,"ETH","410 Registers",
+ 1,"EXTI","64 Registers",
+ 1,"FDCAN","420 Registers",
+ 1,"FMC","100 Registers",
+ 1,"GFXMMU","4114 Registers",
+ 1,"GFXTIM","52 Registers",
+ 1,"GPDMA","346 Registers",
+ 1,"GPIO","64 Registers",
+ 1,"HASH","258 Registers",
+ 1,"HDP","12 Registers",
+ 1,"HPDMA","410 Registers",
+ 1,"I2C","88 Registers",
+ 1,"I3C","124 Registers",
+ 1,"ICACHE","12 Registers",
+ 1,"IWDG","14 Registers",
+ 1,"JPEG","1008 Registers",
+ 1,"LPTIM","138 Registers",
+ 1,"LPUART","24 Registers",
+ 1,"LTDC","140 Registers",
+ 1,"MCE","384 Registers",
+ 1,"MDF","196 Registers",
+ 1,"MDIOS","142 Registers",
+ 1,"OTG","964 Registers",
+ 1,"PKA","6 Registers",
+ 1,"PSSI","14 Registers",
+ 1,"PWR","34 Registers",
+ 1,"RAMCFG","76 Registers",
+ 1,"RCC","500 Registers",
+ 1,"RIF","48 Registers",
+ 1,"RIFSC","76 Registers",
+ 1,"RISAF","370 Registers",
+ 1,"RNG","10 Registers",
+ 1,"RTC","50 Registers",
+ 1,"SAES","54 Registers",
+ 1,"SAI","76 Registers",
+ 1,"SDMMC","156 Registers",
+ 1,"SPDIFRX","18 Registers",
+ 1,"SPI","168 Registers",
+ 1,"SYSCFG","64 Registers",
+ 1,"TAMP","100 Registers",
+ 1,"TIM","316 Registers",
+ 1,"TIMx","168 Registers",
+ 1,"UCPD","28 Registers",
+ 1,"USART","280 Registers",
+ 1,"VENC","710 Registers",
+ 1,"VREFBUF","4 Registers",
+ 1,"WWDG","6 Registers",
+ 1,"XSPI","186 Registers",
+ 1,"XSPIM","2 Registers",
+ 1,"GPIOB","32 Registers","General-purpose I/Os"
+ 1,"GPIOB_S","32 Registers","General-purpose I/Os"
+ 1,"GPIOC","32 Registers","General-purpose I/Os"
+ 1,"GPIOC_S","32 Registers","General-purpose I/Os"
+ 1,"GPIOD","32 Registers","General-purpose I/Os"
+ 1,"GPIOD_S","32 Registers","General-purpose I/Os"
+ 1,"GPIOE","32 Registers","General-purpose I/Os"
+ 1,"GPIOE_S","32 Registers","General-purpose I/Os"
+ 1,"GPIOF","32 Registers","General-purpose I/Os"
+ 1,"GPIOF_S","32 Registers","General-purpose I/Os"
+ 1,"GPIOG","32 Registers","General-purpose I/Os"
+ 1,"GPIOG_S","32 Registers","General-purpose I/Os"
+ 1,"GPIOH","32 Registers","General-purpose I/Os"
+ 1,"GPIOH_S","32 Registers","General-purpose I/Os"
+ 1,"GPION","32 Registers","General-purpose I/Os"
+ 1,"GPION_S","32 Registers","General-purpose I/Os"
+ 1,"GPIOO","32 Registers","General-purpose I/Os"
+ 1,"GPIOO_S","32 Registers","General-purpose I/Os"
+ 1,"GPIOP","32 Registers","General-purpose I/Os"
+ 1,"GPIOP_S","32 Registers","General-purpose I/Os"
+ 1,"GPIOQ","32 Registers","General-purpose I/Os"
+ 1,"GPIOQ_S","32 Registers","General-purpose I/Os"
+ 1,"TIM10","12 Registers","General-purpose timers"
+ 1,"TIM10_S","12 Registers","General-purpose timers"
+ 1,"TIM11","12 Registers","General-purpose timers"
+ 1,"TIM11_S","12 Registers","General-purpose timers"
+ 1,"TIM12","15 Registers","General-purpose timers"
+ 1,"TIM12_S","15 Registers","General-purpose timers"
+ 1,"TIM13","12 Registers","General-purpose timers"
+ 1,"TIM13_S","12 Registers","General-purpose timers"
+ 1,"TIM14","12 Registers","General-purpose timers"
+ 1,"TIM14_S","12 Registers","General-purpose timers"
+ 1,"TIM9","15 Registers","General-purpose timers"
+ 1,"TIM9_S","15 Registers","General-purpose timers"

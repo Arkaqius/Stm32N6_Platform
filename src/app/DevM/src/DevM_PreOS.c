@@ -18,8 +18,10 @@
 #include "cmsis_gcc.h"
 #include "DevM_Runtime.h"
 #include "test_swc.h" // Include the header for Test SWC
-#include "SysM.h"     /* System Manager API */
-
+#include "stm32n6xx_ll_bus.h"
+#include "stm32n6xx_ll_pwr.h"
+#include "stm32n6xx_ll_rcc.h"
+#include "stm32n6xx_ll_utils.h"
 /* Logger */
 #include "logger.h"     /* Logger API */
 #include "cfg_logger.h" /* App cfg */
@@ -45,6 +47,8 @@ static DevM_ReturnType DevM_StateInitMiddlewarePreOS(void);
 static DevM_ReturnType DevM_StateInitServicesPreOS(void);
 /** Disable resource security to allow full SRAM access. */
 static void DevM_DisableResourceSecurity(void);
+
+static void SystemClock_Config(void);
 /* Public Functions Implementation ------------------------------------------*/
 /**
  * @brief Initialize all pre-OS components.
@@ -109,8 +113,15 @@ static DevM_ReturnType DevM_InitInfra(void)
     /* Configure priority grouping */
     NVIC_SetPriorityGrouping(4U);
 
-    /* Update SystemCoreClock variable */
-    SystemCoreClockUpdate();
+    /* Configure the power domain */
+    LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_PWR);
+    LL_PWR_ConfigSupply(LL_PWR_EXTERNAL_SOURCE_SUPPLY);
+    while (LL_PWR_IsActiveFlag_ACTVOSRDY() == 0U)
+    {
+    }
+
+    /* Config clock tree */
+    SystemClock_Config();
 
     /* Configure SysTick to generate interrupt for FreeRTOS tick */
     if (SysTick_Config(SystemCoreClock / configTICK_RATE_HZ) != 0)
@@ -125,6 +136,89 @@ static DevM_ReturnType DevM_InitInfra(void)
                                                        configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY, 0));
 
     return DEVM_OK;
+}
+
+void SystemClock_Config(void)
+{
+    /* Configure the System Power Supply */
+    LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_PWR);
+    LL_PWR_ConfigSupply(LL_PWR_EXTERNAL_SOURCE_SUPPLY);
+    while (LL_PWR_IsActiveFlag_ACTVOSRDY() == 0U)
+    {
+    }
+
+    LL_RCC_HSI_Enable();
+
+    /* Wait till HSI is ready */
+    while (LL_RCC_HSI_IsReady() == 0)
+    {
+    }
+
+    /** Get current CPU/System buses clocks configuration and
+     *if necessary switch to intermediate HSI clock to ensure target clock can be set
+     */
+    if ((LL_RCC_GetCpuClkSource() == LL_RCC_CPU_CLKSOURCE_STATUS_IC1) ||
+        (LL_RCC_GetSysClkSource() == LL_RCC_SYS_CLKSOURCE_STATUS_IC2_IC6_IC11))
+    {
+        LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
+        while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI)
+        {
+        }
+        LL_RCC_SetCpuClkSource(LL_RCC_CPU_CLKSOURCE_HSI);
+        while (LL_RCC_GetCpuClkSource() != LL_RCC_CPU_CLKSOURCE_STATUS_HSI)
+        {
+        }
+    }
+    LL_RCC_PLL1_Disable();
+    while (LL_RCC_PLL1_IsReady() == 1)
+    {
+    }
+    LL_RCC_PLL1_DisableModulationSpreadSpectrum();
+    LL_RCC_PLL1_DisableBypass();
+    LL_RCC_PLL1_SetSource(LL_RCC_PLLSOURCE_HSI);
+    LL_RCC_PLL1_SetM(4);
+    LL_RCC_PLL1_SetN(75);
+    LL_RCC_PLL1_SetP1(1);
+    LL_RCC_PLL1_SetP2(1);
+    LL_RCC_PLL1_SetFRACN(0);
+    LL_RCC_PLL1_AssertModulationSpreadSpectrumReset();
+    LL_RCC_PLL1_DisableFractionalModulationSpreadSpectrum();
+    LL_RCC_PLL1P_Enable();
+    LL_RCC_PLL1_Enable();
+    while (LL_RCC_PLL1_IsReady() != 1)
+    {
+    }
+
+    LL_RCC_SetAHBPrescaler(LL_RCC_AHB_DIV_2);
+    LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
+    LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
+    LL_RCC_SetAPB4Prescaler(LL_RCC_APB4_DIV_1);
+    LL_RCC_SetAPB5Prescaler(LL_RCC_APB5_DIV_1);
+
+    LL_RCC_SetTIMPrescaler(LL_RCC_TIM_PRESCALER_1);
+
+    LL_RCC_IC1_SetSource(LL_RCC_ICCLKSOURCE_PLL1);
+    LL_RCC_IC1_SetDivider(2);
+    LL_RCC_IC1_Enable();
+    LL_RCC_SetCpuClkSource(LL_RCC_CPU_CLKSOURCE_IC1);
+    while (LL_RCC_GetCpuClkSource() != LL_RCC_CPU_CLKSOURCE_STATUS_IC1)
+    {
+    }
+
+    LL_RCC_IC2_SetSource(LL_RCC_ICCLKSOURCE_PLL1);
+    LL_RCC_IC2_SetDivider(3);
+    LL_RCC_IC6_SetSource(LL_RCC_ICCLKSOURCE_PLL1);
+    LL_RCC_IC6_SetDivider(4);
+    LL_RCC_IC11_SetSource(LL_RCC_ICCLKSOURCE_PLL1);
+    LL_RCC_IC11_SetDivider(3);
+    LL_RCC_IC2_Enable();
+    LL_RCC_IC6_Enable();
+    LL_RCC_IC11_Enable();
+    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_IC2_IC6_IC11);
+    while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_IC2_IC6_IC11)
+    {
+    }
+    LL_SetSystemCoreClock(600000000);
 }
 
 /**

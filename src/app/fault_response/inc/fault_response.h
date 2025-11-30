@@ -13,35 +13,36 @@
 #include "fault.h"
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-/* Typedefs -----------------------------------------------------------------*/
-/** Hook function invoked when a fault transitions state. */
-typedef void (*FaultResponseHook)(Fault_T *fault, bool active);
+    /* Typedefs -----------------------------------------------------------------*/
+    /** Hook function invoked when a fault transitions state. */
+    typedef void (*FaultResponseHook)(Fault_T *fault, bool active);
 
 #ifndef FAULT_RESPONSE_MANAGER_MAX_ENTRIES
 #define FAULT_RESPONSE_MANAGER_MAX_ENTRIES 16 /**< Size of the response table */
 #endif
 
-/* Exported Functions -------------------------------------------------------*/
-/**
- * @brief Register a response hook for the given fault.
- *
- * @param[in] fault Fault instance to associate with the hook.
- * @param[in] hook  Callback function invoked on transitions.
- */
-void FaultResponseManager_Register(Fault_T *fault, FaultResponseHook hook);
+    /* Exported Functions -------------------------------------------------------*/
+    /**
+     * @brief Register a response hook for the given fault.
+     *
+     * @param[in] fault Fault instance to associate with the hook.
+     * @param[in] hook  Callback function invoked on transitions.
+     */
+    void FaultResponseManager_Register(Fault_T *fault, FaultResponseHook hook);
 
-/**
- * @brief Dispatch a fault state change to the registered hook.
- *
- * Typically called by the Fault Manager once a fault transitions.
- *
- * @param[in] fault     Fault instance that changed state.
- * @param[in] new_state true if the fault became active.
- */
-void FaultResponseManager_Dispatch(Fault_T *fault, bool new_state);
+    /**
+     * @brief Dispatch a fault state change to the registered hook.
+     *
+     * Typically called by the Fault Manager once a fault transitions.
+     *
+     * @param[in] fault     Fault instance that changed state.
+     * @param[in] new_state true if the fault became active.
+     */
+    void FaultResponseManager_Dispatch(Fault_T *fault, bool new_state);
 
 #ifdef __cplusplus
 }

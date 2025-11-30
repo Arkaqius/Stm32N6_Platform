@@ -16,13 +16,11 @@
 
 /* Private Function Prototypes ----------------------------------------------*/
 /** Initialize basic software components after the OS has started. */
-static DevM_ReturnType DevM_StateInitBswPostOS(void); 
+static DevM_ReturnType DevM_StateInitBswPostOS(void);
 /** Initialize middleware components after the OS has started. */
-static DevM_ReturnType DevM_StateInitMiddlewarePostOS(void); 
-/** Initialize service layer components after the OS has started. */
-static DevM_ReturnType DevM_StateInitServicesPostOS(void); 
+static DevM_ReturnType DevM_StateInitMiddlewarePostOS(void);
 /** Final application initialization step. */
-static DevM_ReturnType DevM_StateInitApp(void); 
+static DevM_ReturnType DevM_StateInitApp(void);
 /* Public Functions Implementation ------------------------------------------*/
 /**
  * @brief Initialize all post-OS components.
@@ -34,8 +32,7 @@ DevM_ReturnType DevM_StateInitPostOS(void)
         return DEVM_ERROR;
     if (DevM_StateInitMiddlewarePostOS() != DEVM_OK)
         return DEVM_ERROR;
-    if (DevM_StateInitServicesPostOS() != DEVM_OK)
-        return DEVM_ERROR;
+    ;
     if (DevM_StateInitApp() != DEVM_OK)
         return DEVM_ERROR;
     return DEVM_OK;
@@ -46,7 +43,5 @@ DevM_ReturnType DevM_StateInitPostOS(void)
 static DevM_ReturnType DevM_StateInitBswPostOS(void) { return DEVM_OK; }
 /** Middleware initialization after OS start. */
 static DevM_ReturnType DevM_StateInitMiddlewarePostOS(void) { return DEVM_OK; }
-/** Service layer initialization after OS start. */
-static DevM_ReturnType DevM_StateInitServicesPostOS(void) { return DEVM_OK; }
 /** Application specific initialization after all services are ready. */
 static DevM_ReturnType DevM_StateInitApp(void) { return DEVM_OK; }

@@ -16,6 +16,11 @@
         "test_swc.h": "c",
         "logger.h": "c",
         "logger_cfg.h": "c",
-        "cfg_logger.h": "c"
-    }
+        "cfg_logger.h": "c",
+        "stm32n6xx_ll_utils.h": "c",
+        "stm32n6xx_ll_pwr.h": "c",
+        "stm32n6xx_ll_rcc.h": "c",
+        "cstdlib": "c"
+    },
+    "C_Cpp.default.compilerPath": "C:/_00_Main/LLVM/clang+llvm-18.1.8-x86_64-pc-windows-msvc/bin/clang.exe"
 }

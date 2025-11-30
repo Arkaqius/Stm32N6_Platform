@@ -8,6 +8,7 @@
 
 /* Includes -----------------------------------------------------------------*/
 #include "fault_manager.h"
+#include "stddef.h"
 
 /* Forward declaration to decouple from the application component */
 void FaultResponseManager_Dispatch(Fault_T *fault, bool new_state);
@@ -16,10 +17,12 @@ void FaultResponseManager_Dispatch(Fault_T *fault, bool new_state);
 /**
  * @brief Check if a fault is shadowed by any other active fault.
  */
-static bool is_shadowed(const Fault_T *f)
+static bool FaultManger_is_shadowed(const Fault_T *f)
 {
-    for (uint8_t i = 0; i < f->shadow_count; ++i) {
-        if (Fault_IsActive(f->shadow_faults[i])) {
+    for (uint8_t i = 0; i < f->shadow_count; ++i)
+    {
+        if (Fault_IsActive(f->shadow_faults[i]))
+        {
             return true;
         }
     }
@@ -27,6 +30,12 @@ static bool is_shadowed(const Fault_T *f)
 }
 
 /* Public Functions Implementation ------------------------------------------*/
+void FaultManger_Init(FaultManager_T *mgr, Symptom_T *symptoms)
+{
+    mgr->symptoms = symptoms;
+    mgr->faults = NULL;
+    mgr->fault_count = 0;
+}
 /**
  * @brief Evaluate all faults managed by the given manager.
  *
@@ -34,28 +43,35 @@ static bool is_shadowed(const Fault_T *f)
  */
 void FaultManager_Tick(FaultManager_T *mgr)
 {
-    if (!mgr) {
+    if (!mgr)
+    {
         return;
     }
 
-    for (uint8_t i = 0; i < mgr->fault_count; ++i) {
+    for (uint8_t i = 0; i < mgr->fault_count; ++i)
+    {
         Fault_T *f = mgr->faults[i];
-        if (!f || f->inhibit) {
+        if (!f || f->inhibit)
+        {
             continue;
         }
 
-        if (is_shadowed(f)) {
+        if (FaultManger_is_shadowed(f))
+        {
             continue;
         }
 
         FaultState_T prev_state = f->state;
         Fault_Tick(f);
-        if (prev_state != f->state) {
+        if (prev_state != f->state)
+        {
             bool new_state = (f->state == FAULT_STATE_ACTIVE);
-            if (new_state && f->capture_freeze_frame) {
+            if (new_state && f->capture_freeze_frame)
+            {
                 f->capture_freeze_frame(f);
             }
-            if (f->on_transition) {
+            if (f->on_transition)
+            {
                 f->on_transition(f, new_state);
             }
             FaultResponseManager_Dispatch(f, new_state);
@@ -72,12 +88,15 @@ void FaultManager_Tick(FaultManager_T *mgr)
  */
 bool FaultManager_IsAnyFaultActive(FaultManager_T *mgr)
 {
-    if (!mgr) {
+    if (!mgr)
+    {
         return false;
     }
 
-    for (uint8_t i = 0; i < mgr->fault_count; ++i) {
-        if (Fault_IsActive(mgr->faults[i])) {
+    for (uint8_t i = 0; i < mgr->fault_count; ++i)
+    {
+        if (Fault_IsActive(mgr->faults[i]))
+        {
             return true;
         }
     }
@@ -91,11 +110,25 @@ bool FaultManager_IsAnyFaultActive(FaultManager_T *mgr)
  */
 void FaultManager_ForceAllClear(FaultManager_T *mgr)
 {
-    if (!mgr) {
+    if (!mgr)
+    {
         return;
     }
 
-    for (uint8_t i = 0; i < mgr->fault_count; ++i) {
+    for (uint8_t i = 0; i < mgr->fault_count; ++i)
+    {
         Fault_ForceState(mgr->faults[i], false);
+    }
+}
+
+void FaultManager_SetSymptom(FaultManager_T *mgr, SymptomsEnum_T symptom, bool isActive)
+{
+    if (!mgr || symptom >= mgr->symptom_count)
+    {
+        return;
+    }
+    else
+    {
+        Symptom_SetLevel(FaultM_SymCfg(mgr, symptom), isActive, xTaskGetTickCount());
     }
 }
