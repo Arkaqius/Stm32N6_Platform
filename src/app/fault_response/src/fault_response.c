@@ -14,13 +14,13 @@
 /** Entry linking a fault to its response hook. */
 typedef struct
 {
-    Fault_T           *fault; /**< Fault to monitor */
-    FaultResponseHook  hook;  /**< Hook invoked on transition */
+    Flt_T *fault;           /**< Fault to monitor */
+    FaultResponseHook hook; /**< Hook invoked on transition */
 } FaultResponseEntry;
 
 /* Global Variables ---------------------------------------------------------*/
 static FaultResponseEntry response_table[FAULT_RESPONSE_MANAGER_MAX_ENTRIES];
-static uint8_t           response_count = 0;
+static uint8_t response_count = 0;
 
 /* Public Functions Implementation ------------------------------------------*/
 /**
@@ -29,9 +29,10 @@ static uint8_t           response_count = 0;
  * @param[in] fault Fault instance to monitor.
  * @param[in] hook  Callback invoked on state changes.
  */
-void FaultResponseManager_Register(Fault_T *fault, FaultResponseHook hook)
+void FaultResponseManager_Register(Flt_T *fault, FaultResponseHook hook)
 {
-    if (response_count >= FAULT_RESPONSE_MANAGER_MAX_ENTRIES) {
+    if (response_count >= FAULT_RESPONSE_MANAGER_MAX_ENTRIES)
+    {
         return;
     }
 
@@ -46,10 +47,12 @@ void FaultResponseManager_Register(Fault_T *fault, FaultResponseHook hook)
  * @param[in] fault     Fault instance that changed.
  * @param[in] new_state true if the fault became active.
  */
-void FaultResponseManager_Dispatch(Fault_T *fault, bool new_state)
+void FaultResponseManager_Dispatch(Flt_T *fault, bool new_state)
 {
-    for (uint8_t i = 0; i < response_count; ++i) {
-        if (response_table[i].fault == fault && response_table[i].hook) {
+    for (uint8_t i = 0; i < response_count; ++i)
+    {
+        if (response_table[i].fault == fault && response_table[i].hook)
+        {
             response_table[i].hook(fault, new_state);
             break;
         }

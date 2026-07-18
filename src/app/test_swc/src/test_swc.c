@@ -11,11 +11,11 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "test_swc.h"
-#include "UartDma.h"    // Include UART DMA header for testing
-#include "logger.h"     // Include logger for logging messages
-#include "cfg_logger.h" // Logger configuration
+#include "UartDma.h"      // Include UART DMA header for testing
+#include "logger.h"       // Include logger for logging messages
+#include "cfg_logger.h"   // Logger configuration
 #include "DevM_Runtime.h" // Logger context provider
-#include <string.h>     // For string operations
+#include <string.h>       // For string operations
 // #include "fault_manager.h" // Include Fault Manager for fault handling
 // /#include "symptom.h" // Include Symptom for monitoring system state
 
@@ -26,7 +26,7 @@
 #include "stm32n6xx_ll_utils.h"
 #include "stm32n6xx_ll_pwr.h"
 /* Defines ------------------------------------------------------------------*/
-#define TEST_TASK_PERIOD_MS (1U) /**< Period of the demo task in milliseconds */
+#define TEST_TASK_PERIOD_MS (100U) /**< Period of the demo task in milliseconds */
 
 /* ADC Test */
 #define ADCx ADC1
@@ -92,7 +92,7 @@ static void TestTask(void *pvParameters)
     Activate_ADC();
     for (;;)
     {
-        /*
+
         Logger_Entry_T *entry = logger_alloc_entry(loggerCtx); // Allocate a log entry
         if (entry)
         {
@@ -104,7 +104,6 @@ static void TestTask(void *pvParameters)
         {
             logger_trigger_highprio(loggerCtx, CFG_LOGGER_ALLOC_FAILED, xTaskGetTickCount());
         }
-        */
         /* Use value here (e.g., debugging, filtering, etc.) */
 
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(TEST_TASK_PERIOD_MS));

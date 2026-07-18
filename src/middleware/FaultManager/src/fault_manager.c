@@ -7,72 +7,95 @@
  */
 
 /* Includes -----------------------------------------------------------------*/
-#include "fault_manager.h"
+#include "flt_man_api.h"
+#include "flt_man_types.h"
+#include "fault_api.h"
+#include "symptom_api.h"
 #include "stddef.h"
 
-/* Forward declaration to decouple from the application component */
-void FaultResponseManager_Dispatch(Fault_T *fault, bool new_state);
+/* Defines ------------------------------------------------------------------*/
 
-/* Private Functions --------------------------------------------------------*/
+/* Local Types and Typedefs -------------------------------------------------*/
+
+/* Global Variables ---------------------------------------------------------*/
+
+/* Private Function Prototypes ----------------------------------------------*/
+/**
+ * @brief Dispatch a fault state transition to the application response manager.
+ *
+ * @param[in,out] fault     Fault whose state changed.
+ * @param[in]     new_state True when the fault became active; false otherwise.
+ */
+/* Forward declaration to decouple from the application component */
+void FaultResponseManager_Dispatch(Flt_T *fault, bool new_state);
+
 /**
  * @brief Check if a fault is shadowed by any other active fault.
+ *
+ * @param[in] f Fault whose shadowing configuration is inspected.
+ *
+ * @return True when at least one configured shadow fault is active.
  */
-static bool FaultManger_is_shadowed(const Fault_T *f)
-{
-    for (uint8_t i = 0; i < f->shadow_count; ++i)
-    {
-        if (Fault_IsActive(f->shadow_faults[i]))
-        {
-            return true;
-        }
-    }
-    return false;
-}
+static bool FltMan_IsShadowed(const Flt_T *f);
 
 /* Public Functions Implementation ------------------------------------------*/
-void FaultManger_Init(FaultManager_T *mgr, Symptom_T *symptoms)
+/**
+ * @brief Initialize a fault manager instance.
+ *
+ * The manager starts with the supplied symptom collection and no registered
+ * faults.
+ *
+ * @param[out] mgr      Manager instance to initialize.
+ * @param[in]  symptoms Symptom collection managed by the instance.
+ */
+void FltMan_Init(FltMan_T *mgr, Symptom_T *symptoms)
 {
-    mgr->symptoms = symptoms;
-    mgr->faults = NULL;
-    mgr->fault_count = 0;
+    if (!mgr || !mgr->runtime)
+    {
+        return;
+    }
+
+    mgr->runtime->symptoms = symptoms;
+    mgr->runtime->counter = 0U;
 }
+
 /**
  * @brief Evaluate all faults managed by the given manager.
  *
  * @param[in,out] mgr Manager instance containing the fault list.
  */
-void FaultManager_Tick(FaultManager_T *mgr)
+void FltMan_Tick(FltMan_T *mgr)
 {
-    if (!mgr)
+    if (!mgr || !mgr->cfg)
     {
         return;
     }
 
-    for (uint8_t i = 0; i < mgr->fault_count; ++i)
+    for (uint8_t i = 0; i < mgr->cfg->fault_count; ++i)
     {
-        Fault_T *f = mgr->faults[i];
-        if (!f || f->inhibit)
+        Flt_T *f = &mgr->cfg->faults[i];
+        if (!f->rt || f->rt->inhibit)
         {
             continue;
         }
 
-        if (FaultManger_is_shadowed(f))
+        if (FltMan_IsShadowed(f))
         {
             continue;
         }
 
-        FaultState_T prev_state = f->state;
+        FaultState_T prev_state = f->rt->state;
         Fault_Tick(f);
-        if (prev_state != f->state)
+        if (prev_state != f->rt->state)
         {
-            bool new_state = (f->state == FAULT_STATE_ACTIVE);
-            if (new_state && f->capture_freeze_frame)
+            bool new_state = (f->rt->state == FAULT_STATE_ACTIVE);
+            if (new_state && f->cfg->capture_freeze_frame)
             {
-                f->capture_freeze_frame(f);
+                f->cfg->capture_freeze_frame(f);
             }
-            if (f->on_transition)
+            if (f->cfg->on_transition)
             {
-                f->on_transition(f, new_state);
+                f->cfg->on_transition(f, new_state);
             }
             FaultResponseManager_Dispatch(f, new_state);
         }
@@ -86,16 +109,16 @@ void FaultManager_Tick(FaultManager_T *mgr)
  *
  * @return true when at least one fault reports active.
  */
-bool FaultManager_IsAnyFaultActive(FaultManager_T *mgr)
+bool FltMan_IsAnyFaultActive(FltMan_T *mgr)
 {
-    if (!mgr)
+    if (!mgr || !mgr->cfg)
     {
         return false;
     }
 
-    for (uint8_t i = 0; i < mgr->fault_count; ++i)
+    for (uint8_t i = 0; i < mgr->cfg->fault_count; ++i)
     {
-        if (Fault_IsActive(mgr->faults[i]))
+        if (Fault_IsActive(&mgr->cfg->faults[i]))
         {
             return true;
         }
@@ -108,27 +131,60 @@ bool FaultManager_IsAnyFaultActive(FaultManager_T *mgr)
  *
  * @param[in,out] mgr Manager instance.
  */
-void FaultManager_ForceAllClear(FaultManager_T *mgr)
+void FltMan_ForceAllClear(FltMan_T *mgr)
 {
-    if (!mgr)
+    if (!mgr || !mgr->cfg)
     {
         return;
     }
 
-    for (uint8_t i = 0; i < mgr->fault_count; ++i)
+    for (uint8_t i = 0; i < mgr->cfg->fault_count; ++i)
     {
-        Fault_ForceState(mgr->faults[i], false);
+        Fault_ForceState(&mgr->cfg->faults[i], false);
     }
 }
 
-void FaultManager_SetSymptom(FaultManager_T *mgr, SymptomsEnum_T symptom, bool isActive)
+/**
+ * @brief Set the activity level of a symptom managed by the instance.
+ *
+ * Invalid manager pointers and symptom identifiers are ignored.
+ *
+ * @param[in,out] mgr      Manager instance containing the symptom.
+ * @param[in]     symptom  Identifier of the symptom to update.
+ * @param[in]     isActive New symptom activity level.
+ */
+void FltMan_SetSymptom(FltMan_T *mgr, SymptomsEnum_T symptom, bool isActive)
 {
-    if (!mgr || symptom >= mgr->symptom_count)
+    if (!mgr || !mgr->cfg || !mgr->runtime || !mgr->runtime->symptoms ||
+        symptom >= mgr->cfg->symptom_count)
     {
         return;
     }
-    else
+
+    Symptom_SetLevel(mgr->runtime->symptoms[symptom].state, isActive, 0U);
+}
+
+/* Private Functions Implementation -----------------------------------------*/
+/**
+ * @brief Check if a fault is shadowed by any other active fault.
+ *
+ * @param[in] f Fault whose shadowing configuration is inspected.
+ *
+ * @return True when at least one configured shadow fault is active.
+ */
+static bool FltMan_IsShadowed(const Flt_T *f)
+{
+    if (!f || !f->cfg)
     {
-        Symptom_SetLevel(FaultM_SymCfg(mgr, symptom), isActive, xTaskGetTickCount());
+        return false;
     }
+
+    for (uint8_t i = 0; i < f->cfg->shadow_count; ++i)
+    {
+        if (Fault_IsActive(f->cfg->shadow_faults[i]))
+        {
+            return true;
+        }
+    }
+    return false;
 }

@@ -109,6 +109,10 @@ void Cfg_Logger_Init(void)
                              &hp_alloc_failed);
 }
 
+void Cfg_FaultManager_Init()
+{
+}
+
 /**
  * @brief Normal operating state handling.
  */

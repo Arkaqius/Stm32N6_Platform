@@ -20,4 +20,5 @@ target_link_libraries(${COMPONENT_NAME}
         test_swc
         logger
         HAL_Drv
+        fault_mgmt
 )
