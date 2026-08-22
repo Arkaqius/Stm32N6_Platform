@@ -25,11 +25,15 @@
 /**
  * @brief Evaluate a single fault and update its state.
  *
- * Typically called by the Fault Manager each tick.
+ * Typically called by the Fault Manager each tick. This operation performs
+ * input sampling, debounce, state evaluation, freeze-frame capture, and
+ * transition notification.
  *
- * @param[in,out] f Fault instance to process.
+ * @param[in] f Fault whose runtime state is processed.
+ *
+ * @return True when the fault state changed during this tick.
  */
-void Fault_Tick(Flt_T *f);
+bool Fault_Tick(const Flt_T *f);
 
 /**
  * @brief Query whether the fault is currently active.
@@ -43,19 +47,19 @@ bool Fault_IsActive(const Flt_T *f);
 /**
  * @brief Enable or disable fault evaluation.
  *
- * @param[in,out] f      Fault instance to modify.
+ * @param[in]     f       Fault whose runtime state is modified.
  * @param[in]     enabled True to inhibit evaluation, false to enable.
  */
-void Fault_SetInhibit(Flt_T *f, bool enabled);
+void Fault_SetInhibit(const Flt_T *f, bool enabled);
 
 /**
  * @brief Force the fault to a specific state.
  *
  * Primarily intended for unit tests or debug features.
  *
- * @param[in,out] f     Fault instance to modify.
+ * @param[in]     f     Fault whose runtime state is modified.
  * @param[in]     state Desired active state.
  */
-void Fault_ForceState(Flt_T *f, bool state);
+void Fault_ForceState(const Flt_T *f, bool state);
 
 #endif /* FAULT_API_H */

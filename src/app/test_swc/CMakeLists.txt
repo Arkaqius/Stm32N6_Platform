@@ -15,6 +15,8 @@ target_link_libraries(${COMPONENT_NAME}
         HAL_Drv
         uartDma
         DevM
+        fault_mgmt
+        fault_response
 )
 target_include_directories(${COMPONENT_NAME}
     PUBLIC

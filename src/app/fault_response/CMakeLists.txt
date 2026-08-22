@@ -15,6 +15,6 @@ target_include_directories(${COMPONENT_NAME}
 
 target_link_libraries(${COMPONENT_NAME}
     PUBLIC
-        fault_mgmt
+        flt_man_api
 )
 

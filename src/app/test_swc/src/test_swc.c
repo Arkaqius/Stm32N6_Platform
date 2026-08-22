@@ -14,11 +14,10 @@
 #include "UartDma.h"      // Include UART DMA header for testing
 #include "logger.h"       // Include logger for logging messages
 #include "cfg_logger.h"   // Logger configuration
+#include "cfg_flt_mgr.h"  // Fault Manager configuration
+#include "flt_man_api.h"  // Fault Manager public API
 #include "DevM_Runtime.h" // Logger context provider
 #include <string.h>       // For string operations
-// #include "fault_manager.h" // Include Fault Manager for fault handling
-// /#include "symptom.h" // Include Symptom for monitoring system state
-
 #include "stm32n6xx_ll_adc.h"
 #include "stm32n6xx_ll_bus.h"
 #include "stm32n6xx_ll_gpio.h"
@@ -26,7 +25,8 @@
 #include "stm32n6xx_ll_utils.h"
 #include "stm32n6xx_ll_pwr.h"
 /* Defines ------------------------------------------------------------------*/
-#define TEST_TASK_PERIOD_MS (100U) /**< Period of the demo task in milliseconds */
+#define TEST_TASK_PERIOD_MS (100U)   /**< Period of the demo task in milliseconds */
+#define FLT_MAN_TASK_PERIOD_MS (10U) /**< Period of fault evaluation in milliseconds. */
 
 /* ADC Test */
 #define ADCx ADC1
@@ -40,10 +40,12 @@
 /** Test message sent over UART DMA for demonstration purposes. */
 static char testMessage[] = "Hello\r\n";
 
-// FAULTM_DEFINE_INSTANCE(faultManager, SYS_SYMPTOMS_CFG_INIT, SYMPTOM_TOTAL);
+/** Aggregate Fault Manager state retained for debugger observation. */
+static volatile bool g_testFaultActive = false;
 
 /* Private Function Prototypes ----------------------------------------------*/
 static void TestTask(void *pvParameters);
+static void FltManTask(void *pvParameters);
 static void GPIO_Config(void);
 static void ADC_Config(void);
 static void Activate_ADC(void);
@@ -61,8 +63,8 @@ void TestSWC_Init(void)
     // Initialize the UART DMA module
     UartDma_Init();
 
-    // Initialize Fault Manager
-    /* Totaly done during compile time */
+    // Create the dedicated Fault Manager task before symptom producers.
+    xTaskCreate(FltManTask, "FltManTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
 
     // Create the FreeRTOS task for Test SWC
     xTaskCreate(TestTask, "TestTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
@@ -92,6 +94,7 @@ static void TestTask(void *pvParameters)
     Activate_ADC();
     for (;;)
     {
+        bool loggerPoolExhausted = false;
 
         Logger_Entry_T *entry = logger_alloc_entry(loggerCtx); // Allocate a log entry
         if (entry)
@@ -102,11 +105,36 @@ static void TestTask(void *pvParameters)
         }
         else
         {
+            loggerPoolExhausted = true;
             logger_trigger_highprio(loggerCtx, CFG_LOGGER_ALLOC_FAILED, xTaskGetTickCount());
         }
-        /* Use value here (e.g., debugging, filtering, etc.) */
+
+        FltMan_SetSymptom(&g_flt_man, SYMPTOM_SW_BUFFER_OVERFLOW, loggerPoolExhausted);
 
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(TEST_TASK_PERIOD_MS));
+    }
+}
+
+/**
+ * @brief Periodically evaluate the statically configured Fault Manager.
+ *
+ * This task is the sole owner of fault evaluation and derived fault-state
+ * queries. Other tasks only publish symptom levels through the public API.
+ *
+ * @param[in] pvParameters Unused task parameter.
+ */
+static void FltManTask(void *pvParameters)
+{
+    (void)pvParameters;
+
+    TickType_t xLastWakeTime = xTaskGetTickCount();
+
+    for (;;)
+    {
+        FltMan_Tick(&g_flt_man);
+        g_testFaultActive = FltMan_IsAnyFaultActive(&g_flt_man);
+
+        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(FLT_MAN_TASK_PERIOD_MS));
     }
 }
 

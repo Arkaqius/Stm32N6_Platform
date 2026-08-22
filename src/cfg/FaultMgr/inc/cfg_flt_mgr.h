@@ -29,6 +29,6 @@ typedef enum FaultsEnum_Tag
     FAULT_TOTAL        /**< Total number of Faults */
 } FaultsEnum_T;
 
-extern const FltMan_T g_flt_man;
+extern const struct FltMan_Tag g_flt_man;
 
 #endif /* CFG_FLT_MGR_H */

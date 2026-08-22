@@ -21,17 +21,17 @@
 /**
  * @brief Function called when a fault changes state.
  *
- * @param[in,out] fault     Fault whose state changed.
+ * @param[in]     fault     Fault whose state changed.
  * @param[in]     new_state True when the fault became active; false otherwise.
  */
-typedef void (*FaultTransitionHook)(struct Flt_T *fault, bool new_state);
+typedef void (*FaultTransitionHook)(const struct Flt_T *fault, bool new_state);
 
 /**
  * @brief Function called to capture diagnostic data on fault activation.
  *
- * @param[in,out] fault Fault for which diagnostic data is captured.
+ * @param[in] fault Fault for which diagnostic data is captured.
  */
-typedef void (*FaultFreezeFrameHook)(struct Flt_T *fault);
+typedef void (*FaultFreezeFrameHook)(const struct Flt_T *fault);
 
 /**
  * @brief Possible fault states after evaluation.
@@ -47,10 +47,10 @@ typedef enum
  */
 typedef struct FaultCfg_T
 {
-    Symptom_T *inputs;         /**< Array of symptom input pointers */
-    const uint8_t input_count; /**< Number of input pointers */
-    const uint8_t threshold;   /**< Count required for activation */
-    const uint8_t window;      /**< Maximum counter value */
+    const Symptom_T *inputs;   /**< Array of symptom inputs. */
+    const uint8_t input_count; /**< Number of symptom inputs. */
+    const uint8_t threshold;   /**< Nonzero count required for activation. */
+    const uint8_t window;      /**< Counter limit; zero selects UINT8_MAX. */
 
     const struct Flt_T *const *shadow_faults; /**< Faults that shadow this one */
     const uint8_t shadow_count;               /**< Number of shadowing faults */

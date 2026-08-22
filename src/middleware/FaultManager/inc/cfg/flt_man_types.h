@@ -24,8 +24,8 @@
  */
 typedef struct
 {
-    Flt_T *const faults;          /**< Array of managed faults. */
-    Symptom_T *const symptoms;    /**< Array of managed symptoms. */
+    const Flt_T *const faults;     /**< Array of managed faults. */
+    const Symptom_T *const symptoms; /**< Array of managed symptoms. */
     const uint8_t fault_count;    /**< Number of entries in the fault array. */
     const uint32_t symptom_count; /**< Number of managed symptoms. */
 } FltMan_Cfg_T;

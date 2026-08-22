@@ -19,7 +19,7 @@ extern "C"
 
     /* Typedefs -----------------------------------------------------------------*/
     /** Hook function invoked when a fault transitions state. */
-    typedef void (*FaultResponseHook)(Flt_T *fault, bool active);
+    typedef void (*FaultResponseHook)(const Flt_T *fault, bool active);
 
 #ifndef FAULT_RESPONSE_MANAGER_MAX_ENTRIES
 #define FAULT_RESPONSE_MANAGER_MAX_ENTRIES 16 /**< Size of the response table */
@@ -32,7 +32,7 @@ extern "C"
      * @param[in] fault Fault instance to associate with the hook.
      * @param[in] hook  Callback function invoked on transitions.
      */
-    void FaultResponseManager_Register(Flt_T *fault, FaultResponseHook hook);
+    void FaultResponseManager_Register(const Flt_T *fault, FaultResponseHook hook);
 
     /**
      * @brief Dispatch a fault state change to the registered hook.
@@ -42,7 +42,7 @@ extern "C"
      * @param[in] fault     Fault instance that changed state.
      * @param[in] new_state true if the fault became active.
      */
-    void FaultResponseManager_Dispatch(Flt_T *fault, bool new_state);
+    void FaultResponseManager_Dispatch(const Flt_T *fault, bool new_state);
 
 #ifdef __cplusplus
 }

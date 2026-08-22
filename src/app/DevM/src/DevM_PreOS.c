@@ -35,8 +35,8 @@
 static TaskHandle_t devmTaskHandle = NULL;
 
 /** Queue used to send events to the Device Manager state machine. */
-QueueHandle_t devmEventQueue = NULL;
 /* Private Function Prototypes ----------------------------------------------*/
+QueueHandle_t devmEventQueue = NULL;
 /** Initialize basic infrastructure prior to OS start. */
 static DevM_ReturnType DevM_InitInfra(void);
 /** Initialize basic software components before OS start. */
@@ -44,7 +44,7 @@ static DevM_ReturnType DevM_StateInitBswPreOS(void);
 /** Initialize middleware components before OS start. */
 static DevM_ReturnType DevM_StateInitMiddlewarePreOS(void);
 /** Initialize service components before OS start. */
-static DevM_ReturnType DevM_StateInitServicesPreOS(void);
+static DevM_ReturnType DevM_StateInitAppPreOS(void);
 /** Disable resource security to allow full SRAM access. */
 static void DevM_DisableResourceSecurity(void);
 
@@ -62,7 +62,7 @@ DevM_ReturnType DevM_StateInitPreOS(void)
         return DEVM_ERROR;
     if (DevM_StateInitMiddlewarePreOS() != DEVM_OK)
         return DEVM_ERROR;
-    if (DevM_StateInitServicesPreOS() != DEVM_OK)
+    if (DevM_StateInitAppPreOS() != DEVM_OK)
         return DEVM_ERROR;
     return DEVM_OK;
 }
@@ -235,13 +235,12 @@ static DevM_ReturnType DevM_StateInitBswPreOS(void)
 static DevM_ReturnType DevM_StateInitMiddlewarePreOS(void)
 {
     Cfg_Logger_Init();
-    // Cfg_FaultManager_Init();
     return DEVM_OK;
 }
 /**
  * @brief Initialize application services before OS start.
  */
-static DevM_ReturnType DevM_StateInitServicesPreOS(void)
+static DevM_ReturnType DevM_StateInitAppPreOS(void)
 {
     TestSWC_Init();
     return DEVM_OK;

@@ -14,7 +14,7 @@
 /** Entry linking a fault to its response hook. */
 typedef struct
 {
-    Flt_T *fault;           /**< Fault to monitor */
+    const Flt_T *fault;     /**< Fault to monitor */
     FaultResponseHook hook; /**< Hook invoked on transition */
 } FaultResponseEntry;
 
@@ -29,7 +29,7 @@ static uint8_t response_count = 0;
  * @param[in] fault Fault instance to monitor.
  * @param[in] hook  Callback invoked on state changes.
  */
-void FaultResponseManager_Register(Flt_T *fault, FaultResponseHook hook)
+void FaultResponseManager_Register(const Flt_T *fault, FaultResponseHook hook)
 {
     if (response_count >= FAULT_RESPONSE_MANAGER_MAX_ENTRIES)
     {
@@ -47,7 +47,7 @@ void FaultResponseManager_Register(Flt_T *fault, FaultResponseHook hook)
  * @param[in] fault     Fault instance that changed.
  * @param[in] new_state true if the fault became active.
  */
-void FaultResponseManager_Dispatch(Flt_T *fault, bool new_state)
+void FaultResponseManager_Dispatch(const Flt_T *fault, bool new_state)
 {
     for (uint8_t i = 0; i < response_count; ++i)
     {

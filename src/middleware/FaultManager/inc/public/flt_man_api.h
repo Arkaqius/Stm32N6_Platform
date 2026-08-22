@@ -34,9 +34,9 @@ typedef uint32_t SymptomsEnum_T;
 /**
  * @brief Evaluate every registered fault for one manager tick.
  *
- * @param[in,out] mgr Manager instance to evaluate.
+ * @param[in] mgr Manager instance to evaluate.
  */
-void FltMan_Tick(FltMan_T *mgr);
+void FltMan_Tick(const FltMan_T *mgr);
 
 /**
  * @brief Determine whether any managed fault is active.
@@ -45,30 +45,22 @@ void FltMan_Tick(FltMan_T *mgr);
  *
  * @return True when at least one managed fault is active.
  */
-bool FltMan_IsAnyFaultActive(FltMan_T *mgr);
+bool FltMan_IsAnyFaultActive(const FltMan_T *mgr);
 
 /**
  * @brief Force all managed faults to the inactive state.
  *
- * @param[in,out] mgr Manager instance to modify.
+ * @param[in] mgr Manager whose runtime fault states are modified.
  */
-void FltMan_ForceAllClear(FltMan_T *mgr);
-
-/**
- * @brief Initialize a Fault Manager instance with its symptom collection.
- *
- * @param[out] mgr      Manager instance to initialize.
- * @param[in]  symptoms Symptom collection managed by the instance.
- */
-void FltMan_Init(FltMan_T *mgr, Symptom_T *symptoms);
+void FltMan_ForceAllClear(const FltMan_T *mgr);
 
 /**
  * @brief Set the activity level of a managed symptom.
  *
- * @param[in,out] mgr      Manager instance containing the symptom.
+ * @param[in]     mgr      Manager instance containing the symptom.
  * @param[in]     symptom  Identifier of the symptom to update.
  * @param[in]     isActive New symptom activity level.
  */
-void FltMan_SetSymptom(FltMan_T *mgr, SymptomsEnum_T symptom, bool isActive);
+void FltMan_SetSymptom(const FltMan_T *mgr, SymptomsEnum_T symptom, bool isActive);
 
 #endif /* FLT_MAN_API_H */
