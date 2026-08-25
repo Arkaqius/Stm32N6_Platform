@@ -19,5 +19,6 @@ target_link_libraries(${COMPONENT_NAME}
         cfg_layer
         test_swc
         logger
-        SysM
+        HAL_Drv
+        fault_mgmt
 )

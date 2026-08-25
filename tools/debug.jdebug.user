@@ -1,43 +1,56 @@
 
 
-Breakpoint=C:/STM32N6/03_Repos/proj/src/middleware/logger/src/logger.c:60:1, State=BP_STATE_DISABLED
-Breakpoint=C:/STM32N6/03_Repos/proj/src/middleware/logger/src/logger.c:169:32, State=BP_STATE_DISABLED
-OpenDocument="port.c", FilePath="C:/STM32N6/03_Repos/proj/src/os/portable/port.c", Line=934
-OpenDocument="startup_stm32n657x0hxq.s", FilePath="C:/STM32N6/03_Repos/proj/src/bsw/infra/src/startup_stm32n657x0hxq.s", Line=50
-OpenDocument="logger.c", FilePath="C:/STM32N6/03_Repos/proj/src/middleware/logger/src/logger.c", Line=189
-OpenDocument="stm32n6xx_ll_dma.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/HAL_Drv/Inc/stm32n6xx_ll_dma.h", Line=5505
-OpenDocument="cmsis_gcc.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/CMSIS/Include/cmsis_gcc.h", Line=417
-OpenDocument="test_swc.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/test_swc/src/test_swc.c", Line=0
-OpenDocument="portasm.c", FilePath="C:/STM32N6/03_Repos/proj/src/os/portable/portasm.c", Line=229
+OpenDocument="test_swc.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/test_swc/src/test_swc.c", Line=193
+OpenDocument="SysM.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/SysM/src/SysM.c", Line=0
+OpenDocument="startup_stm32n657x0hxq.s", FilePath="C:/STM32N6/03_Repos/proj/src/bsw/infra/src/startup_stm32n657x0hxq.s", Line=38
+OpenDocument="tasks.c", FilePath="C:/STM32N6/03_Repos/proj/src/os/tasks.c", Line=3490
+OpenDocument="NotWorkingLL.csv", FilePath="C:/STM32N6/03_Repos/proj/tools/NotWorkingLL.csv", Line=145
+OpenDocument="main.c", FilePath="C:/STM32N6/STM32CubeN6/Projects/NUCLEO-N657X0-Q/Examples/ADC/ADC_SingleConversion_TriggerTimer_DMA/FSBL/Src/main.c", Line=175
+OpenDocument="debug.jdebug", FilePath="C:/STM32N6/03_Repos/proj/tools/debug.jdebug", Line=0
+OpenDocument="stm32n6xx_ll_adc.c", FilePath="C:/STM32N6/03_Repos/proj/src/libs/HAL_Drv/Src/stm32n6xx_ll_adc.c", Line=693
+OpenDocument="stm32n6xx_ll_adc.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/HAL_Drv/Inc/stm32n6xx_ll_adc.h", Line=6152
+OpenDocument="DevM_PreOS.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/DevM/src/DevM_PreOS.c", Line=125
+OpenDocument="ll_new_clocks.csv", FilePath="C:/STM32N6/03_Repos/proj/tools/ll_new_clocks.csv", Line=0
+OpenDocument="WorkingHAL.csv", FilePath="C:/STM32N6/03_Repos/proj/tools/WorkingHAL.csv", Line=163
+OpenDocument="stm32n6xx_nucleo.c", FilePath="C:/STM32N6/STM32CubeN6/Drivers/BSP/STM32N6xx_Nucleo/stm32n6xx_nucleo.c", Line=260
+OpenDocument="stm32n6xx_ll_utils.c", FilePath="C:/STM32N6/03_Repos/proj/src/libs/HAL_Drv/Src/stm32n6xx_ll_utils.c", Line=164
+OpenDocument="queue.c", FilePath="C:/STM32N6/03_Repos/proj/src/os/queue.c", Line=1478
+OpenDocument="stm32n6xx_hal_gpio.c", FilePath="C:/STM32N6/STM32CubeN6/Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_gpio.c", Line=394
+OpenDocument="portasm.c", FilePath="C:/STM32N6/03_Repos/proj/src/os/portable/portasm.c", Line=212
 OpenDocument="stm32n6xx_ll_bus.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/HAL_Drv/Inc/stm32n6xx_ll_bus.h", Line=1391
 OpenDocument="core_cm55.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/CMSIS/Include/core_cm55.h", Line=3836
 OpenDocument="_default_types.h", FilePath="C:/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_types.h", Line=0
-OpenDocument="tasks.c", FilePath="C:/STM32N6/03_Repos/proj/src/os/tasks.c", Line=5010
-OpenDocument="DevM_PreOS.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/DevM/src/DevM_PreOS.c", Line=22
-OpenDocument="cachel1_armv7.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/CMSIS/Include/cachel1_armv7.h", Line=43
+OpenDocument="UartDma.c", FilePath="C:/STM32N6/03_Repos/proj/src/bsw/uart_dma/src/UartDma.c", Line=74
+OpenDocument="DevM.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/DevM/src/DevM.c", Line=1
+OpenDocument="cmsis_gcc.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/CMSIS/Include/cmsis_gcc.h", Line=251
 OpenToolbar="File", Floating=0, x=1, y=0
 OpenToolbar="View", Floating=0, x=2, y=0
 OpenToolbar="Debug", Floating=0, x=0, y=0
 OpenToolbar="Breakpoints", Floating=0, x=3, y=0
-OpenWindow="Call Stack", DockArea=LEFT, x=0, y=0, w=758, h=321, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=3, w=922, h=160, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=922, h=287, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=2, w=758, h=476, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=1, w=922, h=580, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=2560, h=189, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="FreeRTOS", DockArea=LEFT, x=0, y=1, w=758, h=322, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, Showing="Task List"
-OpenWindow="Registers 2", DockArea=RIGHT, x=0, y=2, w=922, h=91, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Call Stack", DockArea=LEFT, x=0, y=0, w=758, h=356, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=1, w=911, h=145, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=2, w=758, h=404, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=911, h=247, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=2, w=911, h=127, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Data Sampling", DockArea=BOTTOM, x=0, y=0, w=845, h=189, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
+OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1714, h=189, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="FreeRTOS", DockArea=LEFT, x=0, y=1, w=758, h=359, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, Showing="Task List"
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=4, w=911, h=475, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Registers 2", DockArea=RIGHT, x=0, y=3, w=911, h=123, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
 SmartViewPlugin="", Page="", Toolbar="Hidden", Window="SmartView 1"
 TableHeader="Vector Catches", SortCol="", SortOrder="DESCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
-TableHeader="Break & Tracepoints", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;294;662]
+TableHeader="Break & Tracepoints", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;294;264]
 TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Stack Frame";"Source";"PC";"Return Address";"Stack Used"], ColWidths=[220;118;104;100;168;100]
+TableHeader="Data Sampling Table", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time"], ColWidths=[100;143]
+TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[100;100;100;100;100;100;100;100;100]
 TableHeader="Power Sampling", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
 TableHeader="Task List", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info";"ID";"Mutex Count";"Notified Value";"Notify State"], ColWidths=[129;110;110;110;110;110;110;110;110;110]
-TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[280;154;471]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Type";"Value";"Location"], ColWidths=[192;199;204;327]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Type";"Value";"Location"], ColWidths=[192;199;204;299]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
-TableHeader="Registers 2", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[263;154;488]
 TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;376]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[280;154;460]
+TableHeader="Local Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[100;100;100;100;147;364]
+TableHeader="Registers 2", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[263;367;264]
 WatchedExpression="entry", Window=Watched Data 1
 WatchedExpression="ts", Window=Watched Data 1
 WatchedExpression="div", Window=Watched Data 1
@@ -45,4 +58,3 @@ WatchedExpression="digit", Window=Watched Data 1
 WatchedExpression="ts_buf", Window=Watched Data 1
 WatchedExpression="data", RefreshRate=1, Window=Watched Data 1
 WatchedExpression="xLastWakeTime", Window=Watched Data 1
-WatchedExpression="logger_context", Window=Watched Data 1

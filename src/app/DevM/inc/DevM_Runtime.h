@@ -15,6 +15,7 @@
 #define DEVM_RUNTIME_H
 /* Includes -----------------------------------------------------------------*/
 #include "DevM.h"
+#include "logger.h"
 
 /* Macros and Defines -------------------------------------------------------*/
 /* Typedefs -----------------------------------------------------------------*/
@@ -29,4 +30,16 @@
  * @param params Unused parameter required by FreeRTOS task signature.
  */
 void DevM_MainFunction(void *params);
+
+/**
+ * @brief Obtain the global logger context used by the application.
+ *
+ * @return Pointer to the statically allocated Logger_Context_T instance.
+ */
+Logger_Context_T *Cfg_Logger_GetContext(void);
+
+/**
+ * @brief Initialize the application logger and register static messages.
+ */
+void Cfg_Logger_Init(void);
 #endif /* DEVM_RUNTIME_H */
