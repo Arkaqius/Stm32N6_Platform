@@ -5,7 +5,7 @@ set(COMPONENT_NAME "middleware_layer")
 
 # Subdirs
 add_subdirectory(logger)
-add_subdirectory(FaultManager)
+add_subdirectory(fault_manager)
 
 add_library(${COMPONENT_NAME} INTERFACE)
 target_link_libraries(${COMPONENT_NAME}
@@ -16,4 +16,3 @@ target_link_libraries(${COMPONENT_NAME}
         cmsis
         fault_mgmt
 )
-

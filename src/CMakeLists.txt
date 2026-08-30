@@ -29,7 +29,7 @@ add_compile_definitions(
 # ------------------------------------------------------------------------------
 # If you want a top-level executable (e.g., for the final firmware image):
 add_executable(${PROJECT_NAME}
-    ./app/DevM/src/DevM.c
+    ./app/dev_m/src/dev_m.c
 )
 
 # Link the interface library so the main executable inherits MCU flags & definitions
@@ -71,4 +71,3 @@ if(DOXYGEN_FOUND)
         VERBATIM
     )
 endif()
-

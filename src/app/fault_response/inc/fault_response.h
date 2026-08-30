@@ -10,7 +10,7 @@
 #define FAULT_RESPONSE_H
 
 /* Includes -----------------------------------------------------------------*/
-#include "flt_man_api.h"
+#include "fault_manager_api.h"
 
 #ifdef __cplusplus
 extern "C"

@@ -11,12 +11,12 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "test_swc.h"
-#include "UartDma.h"      // Include UART DMA header for testing
+#include "uart_dma.h"     // Include UART DMA header for testing
 #include "logger.h"       // Include logger for logging messages
 #include "cfg_logger.h"   // Logger configuration
 #include "cfg_flt_mgr.h"  // Fault Manager configuration
-#include "flt_man_api.h"  // Fault Manager public API
-#include "DevM_Runtime.h" // Logger context provider
+#include "fault_manager_api.h" // Fault Manager public API
+#include "dev_m_runtime.h" // Logger context provider
 #include <string.h>       // For string operations
 #include "stm32n6xx_ll_adc.h"
 #include "stm32n6xx_ll_bus.h"

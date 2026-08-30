@@ -13,7 +13,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "logger.h"
-#include "UartDma.h"
+#include "uart_dma.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "cmsis_gcc.h"

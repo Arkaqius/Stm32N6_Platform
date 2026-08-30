@@ -1,0 +1,129 @@
+/**
+ * @file dev_m_runtime.c
+ * @brief Device Manager Runtime Implementation
+ *
+ * This file contains the implementation of the runtime state machine
+ * and related functions for the Device Manager module.
+ */
+
+/* Includes -----------------------------------------------------------------*/
+#include "dev_m.h"
+#include "dev_m_pre_os.h"
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "dev_m_pre_os.h"
+#include "dev_m_runtime.h"
+#include "cfg_logger.h"
+#include "logger.h"
+/* Defines ------------------------------------------------------------------*/
+
+/* Local Types and Typedefs -------------------------------------------------*/
+
+/* Global Variables ---------------------------------------------------------*/
+/**< Current state of the Device Manager state machine. */
+static DevM_StateType currentState = DEVM_STATE_FAULT;
+/**
+ * @brief Statically allocated application logger context.
+ */
+static Logger_Context_T logger_context = LOGGER_CONTEXT_INIT;
+
+LOGGER_DEFINE_HIGHPRIO_ENTRY(hp_queue_full, CFG_LOGGER_HP_QUEUE_FULL_MSG);
+LOGGER_DEFINE_HIGHPRIO_ENTRY(hp_alloc_failed, CFG_LOGGER_HP_QUEUE_FULL_MSG);
+
+/* Private Function Prototypes ----------------------------------------------*/
+static DevM_ReturnType DevM_StateRun(void);
+static DevM_ReturnType DevM_StateFault(void);
+static DevM_ReturnType DevM_StateSoftRestart(void);
+/* Public Functions Implementation ------------------------------------------*/
+/**
+ * @brief Run one iteration of the Device Manager state machine.
+ */
+void DevM_RunStateMachine(void)
+{
+    DevM_ReturnType ret = DEVM_OK;
+
+    switch (currentState)
+    {
+
+   case DEVM_STATE_RUN:
+        DevM_StateRun();
+        break;
+
+    case DEVM_STATE_FAULT:
+        DevM_StateFault();
+        break;
+
+    case DEVM_STATE_SOFT_RESTART:
+        DevM_StateSoftRestart();
+        break;
+
+    case DEVM_STATE_INIT_PRE_OS:
+    case DEVM_STATE_INIT_OS:
+    default:
+        currentState = DEVM_STATE_FAULT;
+        break;
+    }
+}
+/* Private Functions Implementation -----------------------------------------*/
+
+/**
+ * @brief Fault handling routine.
+ * @return Does not return.
+ */
+static __attribute__((noreturn)) DevM_ReturnType DevM_StateFault(void)
+{
+    while (1)
+    {
+        /* We just hang here forever */
+    }
+}
+
+/**
+ * @brief Perform a software-triggered system reset.
+ * @return Never reached.
+ */
+static DevM_ReturnType DevM_StateSoftRestart(void)
+{
+    /* TODO Make Soft reset */
+    return DEVM_OK;
+}
+
+Logger_Context_T *Cfg_Logger_GetContext(void)
+{
+    return &logger_context;
+}
+
+void Cfg_Logger_Init(void)
+{
+    logger_register_highprio(&logger_context,
+                             CFG_LOGGER_HP_QUEUE_FULL_IDX,
+                             &hp_queue_full);
+
+    logger_register_highprio(&logger_context,
+                             CFG_LOGGER_ALLOC_FAILED,
+                             &hp_alloc_failed);
+}
+
+/**
+ * @brief Normal operating state handling.
+ */
+static DevM_ReturnType DevM_StateRun(void) { return DEVM_OK; }
+
+/**
+ * @brief Execute the full state machine until run or fault state.
+ */
+void DevM_MainFunction(void *params)
+{
+    void *pvParameters = params;
+
+    uint32_t receivedEvent;
+
+    for (;;)
+    {
+        if (xQueueReceive(devmEventQueue, &receivedEvent, portMAX_DELAY) == pdPASS)
+        {
+            /* Process the event through the state machine */
+            DevM_RunStateMachine();
+        }
+    }
+}

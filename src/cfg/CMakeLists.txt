@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
-add_subdirectory(FaultMgr)
+add_subdirectory(cfg_flt_mgr)
+add_subdirectory(cfg_exec)
 
 # Set a variable for the component (library) name
 set(COMPONENT_NAME "cfg_layer")
@@ -20,4 +21,5 @@ target_link_libraries(${COMPONENT_NAME}
         cmsis
         logger
         cfg_flt_mgr
+        cfg_exec
 )

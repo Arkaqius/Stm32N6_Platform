@@ -9,7 +9,7 @@ OpenDocument="main.c", FilePath="C:/STM32N6/STM32CubeN6/Projects/NUCLEO-N657X0-Q
 OpenDocument="debug.jdebug", FilePath="C:/STM32N6/03_Repos/proj/tools/debug.jdebug", Line=0
 OpenDocument="stm32n6xx_ll_adc.c", FilePath="C:/STM32N6/03_Repos/proj/src/libs/HAL_Drv/Src/stm32n6xx_ll_adc.c", Line=693
 OpenDocument="stm32n6xx_ll_adc.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/HAL_Drv/Inc/stm32n6xx_ll_adc.h", Line=6152
-OpenDocument="DevM_PreOS.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/DevM/src/DevM_PreOS.c", Line=125
+OpenDocument="dev_m_pre_os.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/dev_m/src/dev_m_pre_os.c", Line=125
 OpenDocument="ll_new_clocks.csv", FilePath="C:/STM32N6/03_Repos/proj/tools/ll_new_clocks.csv", Line=0
 OpenDocument="WorkingHAL.csv", FilePath="C:/STM32N6/03_Repos/proj/tools/WorkingHAL.csv", Line=163
 OpenDocument="stm32n6xx_nucleo.c", FilePath="C:/STM32N6/STM32CubeN6/Drivers/BSP/STM32N6xx_Nucleo/stm32n6xx_nucleo.c", Line=260
@@ -20,8 +20,8 @@ OpenDocument="portasm.c", FilePath="C:/STM32N6/03_Repos/proj/src/os/portable/por
 OpenDocument="stm32n6xx_ll_bus.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/HAL_Drv/Inc/stm32n6xx_ll_bus.h", Line=1391
 OpenDocument="core_cm55.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/CMSIS/Include/core_cm55.h", Line=3836
 OpenDocument="_default_types.h", FilePath="C:/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_types.h", Line=0
-OpenDocument="UartDma.c", FilePath="C:/STM32N6/03_Repos/proj/src/bsw/uart_dma/src/UartDma.c", Line=74
-OpenDocument="DevM.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/DevM/src/DevM.c", Line=1
+OpenDocument="uart_dma.c", FilePath="C:/STM32N6/03_Repos/proj/src/bsw/uart_dma/src/uart_dma.c", Line=74
+OpenDocument="dev_m.c", FilePath="C:/STM32N6/03_Repos/proj/src/app/dev_m/src/dev_m.c", Line=1
 OpenDocument="cmsis_gcc.h", FilePath="C:/STM32N6/03_Repos/proj/src/libs/CMSIS/Include/cmsis_gcc.h", Line=251
 OpenToolbar="File", Floating=0, x=1, y=0
 OpenToolbar="View", Floating=0, x=2, y=0
