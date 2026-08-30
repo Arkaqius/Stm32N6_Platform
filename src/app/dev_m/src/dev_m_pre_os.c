@@ -25,7 +25,7 @@
 /* Logger */
 #include "logger.h"     /* Logger API */
 #include "cfg_logger.h" /* App cfg */
-
+#include "cfg_exec.h"
 /* Defines ------------------------------------------------------------------*/
 
 /* Local Types and Typedefs -------------------------------------------------*/
@@ -70,6 +70,8 @@ DevM_ReturnType DevM_StateInitPreOS(void)
 /* Implementation of OS initialization function */
 DevM_ReturnType DevM_StateInitOS(void)
 {
+    Exec_CreateTasks(&g_execTasksCfg);
+
     /* Create queue for state events */
     devmEventQueue = xQueueCreate(10, sizeof(uint32_t));
     if (devmEventQueue == NULL)

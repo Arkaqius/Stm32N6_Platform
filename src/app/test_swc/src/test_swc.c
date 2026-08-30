@@ -11,13 +11,13 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "test_swc.h"
-#include "uart_dma.h"     // Include UART DMA header for testing
-#include "logger.h"       // Include logger for logging messages
-#include "cfg_logger.h"   // Logger configuration
-#include "cfg_flt_mgr.h"  // Fault Manager configuration
+#include "uart_dma.h"          // Include UART DMA header for testing
+#include "logger.h"            // Include logger for logging messages
+#include "cfg_logger.h"        // Logger configuration
+#include "cfg_flt_mgr.h"       // Fault Manager configuration
 #include "fault_manager_api.h" // Fault Manager public API
-#include "dev_m_runtime.h" // Logger context provider
-#include <string.h>       // For string operations
+#include "dev_m_runtime.h"     // Logger context provider
+#include <string.h>            // For string operations
 #include "stm32n6xx_ll_adc.h"
 #include "stm32n6xx_ll_bus.h"
 #include "stm32n6xx_ll_gpio.h"
@@ -62,9 +62,6 @@ void TestSWC_Init(void)
 {
     // Initialize the UART DMA module
     UartDma_Init();
-
-    // Create the dedicated Fault Manager task before symptom producers.
-    xTaskCreate(FltManTask, "FltManTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
 
     // Create the FreeRTOS task for Test SWC
     xTaskCreate(TestTask, "TestTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
@@ -112,29 +109,6 @@ static void TestTask(void *pvParameters)
         FltMan_SetSymptom(&g_flt_man, SYMPTOM_SW_BUFFER_OVERFLOW, loggerPoolExhausted);
 
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(TEST_TASK_PERIOD_MS));
-    }
-}
-
-/**
- * @brief Periodically evaluate the statically configured Fault Manager.
- *
- * This task is the sole owner of fault evaluation and derived fault-state
- * queries. Other tasks only publish symptom levels through the public API.
- *
- * @param[in] pvParameters Unused task parameter.
- */
-static void FltManTask(void *pvParameters)
-{
-    (void)pvParameters;
-
-    TickType_t xLastWakeTime = xTaskGetTickCount();
-
-    for (;;)
-    {
-        FltMan_Tick(&g_flt_man);
-        g_testFaultActive = FltMan_IsAnyFaultActive(&g_flt_man);
-
-        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(FLT_MAN_TASK_PERIOD_MS));
     }
 }
 

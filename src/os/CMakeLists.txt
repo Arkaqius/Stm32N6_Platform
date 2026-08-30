@@ -24,7 +24,7 @@ target_include_directories(${COMPONENT_NAME}
 
 # Link the global STM32 interface + common
 target_link_libraries(${COMPONENT_NAME}
-    PRIVATE
+    PUBLIC
     cfg_layer
 )
 

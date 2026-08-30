@@ -12,6 +12,6 @@ target_include_directories(${COMPONENT_NAME}
 )
 
 target_link_libraries(${COMPONENT_NAME}
-    PRIVATE
-        Exec_cfg
+    Exec_cfg
+    flt_man_api
 )

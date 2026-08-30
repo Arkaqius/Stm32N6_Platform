@@ -42,7 +42,7 @@ target_include_directories(${CFG_TARGET_NAME}
 
 target_link_libraries(${CFG_TARGET_NAME}
     INTERFACE
-        ${API_TARGET_NAME}
+        ${API_TARGET_NAME} os
 )
 
 add_library(${COMPONENT_NAME} STATIC
@@ -54,6 +54,6 @@ add_library(${COMPONENT_NAME} STATIC
 target_link_libraries(${COMPONENT_NAME}
     PUBLIC
         ${API_TARGET_NAME} os
-    PRIVATE
+     
         ${CFG_TARGET_NAME}
 )

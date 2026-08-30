@@ -21,4 +21,5 @@ target_link_libraries(${COMPONENT_NAME}
         logger
         HAL_Drv
         fault_mgmt
+        cfg_exec
 )

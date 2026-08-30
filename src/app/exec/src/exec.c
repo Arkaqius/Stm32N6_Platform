@@ -17,29 +17,29 @@
 
 /* Public Functions Implementation ------------------------------------------*/
 
-void Exec_Invoke(const ExecRunnable_T *runnable)
+void Exec_InvokeRunnable(const ExecRunnable_T *runnable)
 {
-    Exec_MeasurementStart(runnable);
+    // Exec_MeasurementStart(runnable);
 
     runnable->function(runnable->context);
 
-    Exec_MeasurementStop(runnable);
-    Exec_CheckDeadline(runnable);
+    // Exec_MeasurementStop(runnable);
+    // Exec_CheckDeadline(runnable);
 }
 
-void Exec_CreateTasks(ExecTaskCfg_t cfg[])
+void Exec_CreateTasks(const ExecTaskCfg_t *cfg)
 {
-    for (uint32_t idx = 0; idx < MAX_TASK; idx++)
+    for (uint32_t idx = 0U; idx < cfg->size; idx++)
     {
-        xTaskCreateStatic(cfg[idx].pxTaskCode,
-                                    cfg[idx].pcName,
-                                    cfg[idx].ulStackDepth,
-                                    cfg[idx].pvParameters,
-                                    cfg[idx].uxPriority,
-                                    cfg[idx].puxStackBuffer,
-                                    cfg[idx].pxTaskBuffer );
+        (void)xTaskCreateStatic(
+            cfg->ar[idx].pxTaskCode,
+            cfg->ar[idx].pcName,
+            cfg->ar[idx].ulStackDepth,
+            cfg->ar[idx].pvParameters,
+            cfg->ar[idx].uxPriority,
+            cfg->ar[idx].puxStackBuffer,
+            cfg->ar[idx].pxTaskBuffer);
     }
-    
 }
 
 /* Private Functions Implementation -----------------------------------------*/

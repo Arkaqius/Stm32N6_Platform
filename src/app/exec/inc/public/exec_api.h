@@ -9,11 +9,7 @@
 #define EXEC_API_H
 
 /* Includes -----------------------------------------------------------------*/
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#include "exec_cfg.h"
 
 /* Macros and Defines -------------------------------------------------------*/
 
@@ -27,10 +23,6 @@ extern "C"
  *
  * This function should be called once during application start-up.
  */
-void Exec_Init(void);
-
-#ifdef __cplusplus
-}
-#endif
+void Exec_InvokeRunnable(const ExecRunnable_T *runnable);
 
 #endif /* EXEC_API_H */
